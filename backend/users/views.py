@@ -3,8 +3,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from .serializers import UserEmailSerializer
 from django.contrib.auth import get_user_model
+from .serializers import LoginEmailSerializer
+from django.utils import timezone
+from rest_framework_simplejwt.tokens import RefreshToken
 
 CustomUser = get_user_model()
+
 
 class RegisterEmailViewSet(viewsets.ModelViewSet):
     serializer_class = UserEmailSerializer
@@ -25,3 +29,23 @@ class RegisterEmailViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class LoginEmailViewSet(viewsets.ViewSet):
+    serializer_class = LoginEmailSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+
+        user.last_login = timezone.now()
+        user.save()
+
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_200_OK)
