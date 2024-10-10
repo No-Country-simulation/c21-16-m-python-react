@@ -36,6 +36,7 @@ PROJECT_APPS = [
     'core',
     'users',
     'publication',
+    'roles',
 ]
 
 THIRD_PARTY_APPS = [
