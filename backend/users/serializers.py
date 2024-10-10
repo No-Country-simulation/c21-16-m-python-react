@@ -6,10 +6,11 @@ CustomUser = get_user_model()
 
 class UserEmailSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
+    id = serializers.CharField(read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'password2',
+        fields = ('id','username', 'email', 'password', 'password2',
                   'first_name', 'last_name', 'images')
 
     def validate(self, attrs):
