@@ -29,5 +29,8 @@ urlpatterns = [
     # Rutas de la app users
     path('api/users/', include('users.urls')),
 
+    # Rutas de la app publication
+    path('api/publication/', include('publication.urls')),
+    
     path('admin/', admin.site.urls),
 ]
