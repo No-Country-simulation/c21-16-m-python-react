@@ -70,3 +70,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         if self.images:
             return self.images.url
         return ''
+    
+    def get_role(self):
+        """
+        Retorna el rol asignado al usuario. Si no tiene rol, devuelve 'sin rol definido'.
+        """
+        if hasattr(self, 'role') and self.role:
+            return self.role.name
+        return 'sin rol definido'
