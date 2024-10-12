@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from roles.models import Role
 from django.db import models
 import uuid
-
 
 def blog_thumbnail_directory(instance, filename):
     return 'profile/{0}/{1}'.format(instance.name, filename)
@@ -53,6 +53,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             'Designates whether this user should be treated as active. Unselect this instead of deleting accounts.')
     )
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

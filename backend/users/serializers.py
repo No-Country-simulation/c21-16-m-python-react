@@ -12,13 +12,8 @@ class UserEmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-<<<<<<< HEAD
         fields = ('id','username', 'email', 'password', 'password2',
                   'first_name', 'last_name', 'images', 'role')
-=======
-        fields = ('id', 'username', 'email', 'password', 'password2',
-                  'first_name', 'last_name', 'images')
->>>>>>> b27bc7c750e8a63b0aaf40a446f9bd1c61bda243
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
