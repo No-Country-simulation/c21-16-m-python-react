@@ -30,7 +30,7 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
     # Define que solo se van a mostrar las publicaciones del usuario que ha iniciado sesión.
     def get_queryset(self):
         # Filtra las publicaciones para que solo se muestren las que pertenecen al usuario actual.
-        return Publication.objects.filter(id_user=self.request.user)
+        return Publication.objects.filter(email=self.request.user)
 
 
 # Vista para mostrar las publicaciones de otros usuarios (por ejemplo, cuando se visita el perfil de un amigo).

@@ -12,7 +12,7 @@ class UserEmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id','username', 'email', 'password', 'password2',
+        fields = ('id', 'username', 'email', 'password', 'password2',
                   'first_name', 'last_name', 'images', 'role')
 
     def validate(self, attrs):
@@ -65,3 +65,12 @@ class LoginEmailSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "Must include 'email' and 'password'.")
         return data
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source='get_role', read_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'email', 'first_name',
+                  'last_name', 'images', 'verified', 'date_joined', 'role')

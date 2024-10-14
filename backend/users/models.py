@@ -4,6 +4,7 @@ from roles.models import Role
 from django.db import models
 import uuid
 
+
 def blog_thumbnail_directory(instance, filename):
     return 'profile/{0}/{1}'.format(instance.name, filename)
 
@@ -54,7 +55,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+    role = models.ForeignKey(
+        Role, on_delete=models.SET_NULL, null=True, blank=True, default=1)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -72,7 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         if self.images:
             return self.images.url
         return ''
-    
+
     def get_role(self):
         """
         Retorna el rol asignado al usuario. Si no tiene rol, devuelve 'sin rol definido'.
