@@ -1,8 +1,8 @@
 import { BASE_API_URL } from "@/config";
 import { fetcher } from "@/shared/utils";
 
-export const signin = (values) => {
-	return fetcher(`${BASE_API_URL}/api/users/login/`, {
+export const login = (values) => {
+	return fetcher(`${BASE_API_URL}/api/auth/login/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -11,8 +11,8 @@ export const signin = (values) => {
 	});
 };
 
-export const signup = (values) => {
-	return fetcher(`${BASE_API_URL}/api/users/register/`, {
+export const register = (values) => {
+	return fetcher(`${BASE_API_URL}/api/auth/register/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const signup = (values) => {
 };
 
 export const signout = () => {
-	return fetcher(`${BASE_API_URL}/auth/signout`, {
+	return fetcher(`${BASE_API_URL}/api/auth/signout`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -31,7 +31,7 @@ export const signout = () => {
 };
 
 export const getProfile = (accessToken) => {
-	return fetcher(`${BASE_API_URL}/auth/profile`, {
+	return fetcher(`${BASE_API_URL}/api/auth/profile/`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
@@ -41,7 +41,7 @@ export const getProfile = (accessToken) => {
 };
 
 export const getNewTokens = (refreshToken) => {
-	return fetcher(`${BASE_API_URL}/api/token/refresh/`, {
+	return fetcher(`${BASE_API_URL}/api/auth/refresh-token/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

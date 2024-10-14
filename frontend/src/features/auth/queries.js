@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getNewTokens, getProfile, signin, signout, signup } from "./api";
+import { getNewTokens, getProfile, login, register } from "./api";
 import { REFRESH_TOKEN_KEY, TOKENS_INITIAL_VALUES } from "./constants";
 
 export const authKeys = {
@@ -60,20 +60,20 @@ export const useAuth = () => {
 };
 
 export const useGetProfile = () => {
-	const { access } = useAuth();
+	const { accessToken } = useAuth();
 
 	return useQuery({
 		queryKey: authKeys.profile(),
-		queryFn: () => getProfile(access),
-		enabled: !!access,
+		queryFn: () => getProfile(accessToken),
+		enabled: !!accessToken,
 	});
 };
 
-export const useSignin = () => {
+export const useLogin = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: signin,
+		mutationFn: login,
 		onSuccess({ refresh, access }) {
 			localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
 			queryClient.setQueryData(authKeys.tokens(), { refresh, access });
@@ -81,9 +81,9 @@ export const useSignin = () => {
 	});
 };
 
-export const useSignup = () => {
+export const useRegister = () => {
 	return useMutation({
-		mutationFn: signup,
+		mutationFn: register,
 	});
 };
 
@@ -91,7 +91,8 @@ export const useSignout = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: signout,
+		// mutationFn: signout,
+		mutationFn: () => Promise.resolve(),
 		onSuccess() {
 			localStorage.removeItem(REFRESH_TOKEN_KEY);
 			queryClient.setQueryData(authKeys.tokens(), TOKENS_INITIAL_VALUES);

@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import * as Home from "./routes";
-import * as Signin from "./routes/auth/signin";
-import * as Signup from "./routes/auth/signup";
+import * as Login from "./routes/auth/login";
+import * as Register from "./routes/auth/register";
 import { RedirectAuthenticated } from "./shared/components";
 
 const router = createBrowserRouter([
@@ -10,18 +10,18 @@ const router = createBrowserRouter([
 		element: <Home.Page />,
 	},
 	{
-		path: "/auth/signin",
+		path: "/auth/login",
 		element: (
 			<RedirectAuthenticated>
-				<Signin.Page />
+				<Login.Page />
 			</RedirectAuthenticated>
 		),
 	},
 	{
-		path: "/auth/signup",
+		path: "/auth/register",
 		element: (
 			<RedirectAuthenticated>
-				<Signup.Page />
+				<Register.Page />
 			</RedirectAuthenticated>
 		),
 	},
