@@ -12,6 +12,7 @@ __pycache__/
 __pycache__/
 db.sqlite3
 media/
+migrations/
 
 # Virtual Environment
 venv/
@@ -24,4 +25,3 @@ ENV/
 
 # Dependency directories
 node_modules/
-__pycache__/
