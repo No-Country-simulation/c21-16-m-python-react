@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../features/auth";
+import { useAuth, useGetProfile } from "@/features/auth";
 
 export const Page = () => {
 	const auth = useAuth();
+	const profile = useGetProfile();
 
 	return (
 		<div>
@@ -10,19 +11,20 @@ export const Page = () => {
 				style={{
 					display: "block",
 				}}
-				to="/auth/signin"
+				to="/auth/login"
 			>
-				Signin
+				Login
 			</Link>
 			<Link
 				style={{
 					display: "block",
 				}}
-				to="/auth/signup"
+				to="/auth/register"
 			>
-				Signup
+				Register
 			</Link>
-			<pre>{JSON.stringify(auth, null, 2)}</pre>
+			<pre>auth: {JSON.stringify(auth, null, 2)}</pre>
+			<pre>profile: {JSON.stringify(profile.data, null, 2)}</pre>
 		</div>
 	);
 };

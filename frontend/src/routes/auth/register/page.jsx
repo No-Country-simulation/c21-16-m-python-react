@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { signupInitialValues, signupSchema, useSignup } from "@/features/auth";
+import { signupInitialValues, signupSchema, useRegister } from "@/features/auth";
 
 export const Page = () => {
 	const navigate = useNavigate();
-	const { mutate, isPending } = useSignup();
+	const { mutate, isPending } = useRegister();
 
 	const formik = useFormik({
 		initialValues: signupInitialValues,
@@ -13,7 +13,7 @@ export const Page = () => {
 		onSubmit: (values) => {
 			mutate(values, {
 				onSuccess() {
-					navigate("/auth/signin");
+					navigate("/auth/login");
 				},
 			});
 		},
@@ -24,7 +24,7 @@ export const Page = () => {
 			<Row>
 				<Col>
 					<div className="mb-4">
-						<h1>Signup</h1>
+						<h1>Register</h1>
 						<p>Enter your information to create an account.</p>
 					</div>
 
@@ -109,14 +109,14 @@ export const Page = () => {
 
 						<div className="d-grid mt-2">
 							<Button type="submit" size="lg" disabled={isPending}>
-								Signup
+								Register
 							</Button>
 						</div>
 					</Form>
 
 					<div className="mt-2">
 						<p>
-							Already have an account? <Link to="/auth/signin">Signin</Link>
+							Already have an account? <Link to="/auth/login">Login</Link>
 						</p>
 					</div>
 				</Col>

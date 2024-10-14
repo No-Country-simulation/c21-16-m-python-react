@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { signinInitialValues, signinSchema, useSignin } from "@/features/auth";
+import { signinInitialValues, signinSchema, useLogin } from "@/features/auth";
 
 export const Page = () => {
 	const navigate = useNavigate();
 
-	const { mutate, isPending } = useSignin();
+	const { mutate, isPending } = useLogin();
 
 	const formik = useFormik({
 		initialValues: signinInitialValues,
@@ -25,7 +25,7 @@ export const Page = () => {
 			<Row>
 				<Col>
 					<div className="mb-4">
-						<h1>Signin</h1>
+						<h1>Login</h1>
 						<p>Enter your email bellow to login to your account.</p>
 					</div>
 
@@ -61,14 +61,14 @@ export const Page = () => {
 
 						<div className="d-grid mt-2">
 							<Button type="submit" size="lg" disabled={isPending}>
-								Signin
+								Login
 							</Button>
 						</div>
 					</Form>
 
 					<div className="mt-2">
 						<p>
-							Already have an account? <Link to="/auth/signup">Signup</Link>
+							Already have an account? <Link to="/auth/register">Register</Link>
 						</p>
 					</div>
 				</Col>
