@@ -1,0 +1,49 @@
+.container-hero{
+    background-color: #ff7a45;
+    background: url('../../multimedia/generales/fondo-landing.png');
+    height: 92vh;
+    width: 100vw;
+    min-height: 92vh;
+    position: relative;
+    overflow: hidden;
+}
+.pngs-landing{
+    position: absolute;
+}
+.plato-grande{
+    height: 61vh;
+    right: 0;
+    top: 50vh;
+    transform: translateY(-50%);
+}
+.plato-chico{
+    width: 51vh;
+    right: 40vw;
+    top:0;
+    transform: translateY(-50%);
+}
+.servilleta{
+    top: -30vh;
+    right: 0;
+    width: 51vh;
+}
+.cebollin{
+    left: 0;
+    bottom: 0;
+    height: 41vh;
+}
+.burger{
+    right: 40vh;
+    bottom: -16vh;
+    width: 38vh;
+}
+.hoja-derecha{
+    right: 30vh;
+    bottom: 10vh;
+    width: 7vh;
+}
+.hoja-izquierda{
+    right: 63vh;
+    bottom: 29vh;
+    width: 7vh;
+}

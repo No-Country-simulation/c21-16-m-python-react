@@ -4,9 +4,11 @@ import {
   useRouteError,
 } from "react-router-dom";
 
-import * as Home from "./routes";
-import * as Signin from "./routes/auth/signin";
-import * as Signup from "./routes/auth/signup";
+// import * as Home from "./routes";
+import  * as Signin from "./routes/auth/signin";
+import  * as Signup from "./routes/auth/signup";
+import { Layout } from "./routes/components/layout/layout";
+import { Home } from "./components/homepage/home";
 
 const ErrorBoundary = () => {
   let error = useRouteError();
@@ -18,16 +20,22 @@ const ErrorBoundary = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home.Page />,
+    element: <Layout />,
     errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "/auth/signin",
-    element: <Signin.Page />,
-  },
-  {
-    path: "/auth/signup",
-    element: <Signup.Page />,
+    children: [
+      {
+        path: "/",  // Ruta principal (homepage)
+        element: <Home/>,
+      },
+      {
+        path: "/auth/signin",  // Página de inicio de sesión
+        element: <Signin.Page />,
+      },
+      {
+        path: "/auth/signup",  // Página de registro
+        element: <Signup.Page />,
+      },
+    ],
   },
 ]);
 
