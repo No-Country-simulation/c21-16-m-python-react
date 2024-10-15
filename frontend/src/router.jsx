@@ -1,36 +1,32 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useRouteError,
-} from "react-router-dom";
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import * as Home from "./routes";
-import * as Signin from "./routes/auth/signin";
-import * as Signup from "./routes/auth/signup";
-
-const ErrorBoundary = () => {
-  let error = useRouteError();
-  console.error(error);
-
-  return <div>Dang!</div>;
-};
+import * as Login from "./routes/auth/login";
+import * as Register from "./routes/auth/register";
+import { RedirectAuthenticated } from "./shared/components";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home.Page />,
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "/auth/signin",
-    element: <Signin.Page />,
-  },
-  {
-    path: "/auth/signup",
-    element: <Signup.Page />,
-  },
+	{
+		path: "/",
+		element: <Home.Page />,
+	},
+	{
+		path: "/auth/login",
+		element: (
+			<RedirectAuthenticated>
+				<Login.Page />
+			</RedirectAuthenticated>
+		),
+	},
+	{
+		path: "/auth/register",
+		element: (
+			<RedirectAuthenticated>
+				<Register.Page />
+			</RedirectAuthenticated>
+		),
+	},
 ]);
 
 export const Routes = () => {
-  return <RouterProvider router={router} />;
+	return <RouterProvider router={router} />;
 };

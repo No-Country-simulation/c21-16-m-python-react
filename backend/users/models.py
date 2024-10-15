@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from roles.models import Role
 from django.db import models
 import uuid
-
 
 
 def blog_thumbnail_directory(instance, filename):
@@ -31,26 +31,32 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, username, password, **extra_fields)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    id =            models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
-    email =         models.EmailField(_('email address'), unique=True)
-    username =      models.CharField(_('username'), max_length=150, unique=True)
-    first_name =    models.CharField(_('first name'), max_length=30, blank=True)
-    last_name =     models.CharField(_('last name'), max_length=150, blank=True)
-    images =        models.ImageField(upload_to=blog_thumbnail_directory, max_length=500, blank=True, null=True, help_text="profile photo")
 
-    verified =      models.BooleanField(default=False)
-    is_staff =      models.BooleanField(
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
+    email = models.EmailField(_('email address'), unique=True)
+    username = models.CharField(_('username'), max_length=150, unique=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    images = models.ImageField(upload_to=blog_thumbnail_directory,
+                               max_length=500, blank=True, null=True, help_text="profile photo")
+
+    verified = models.BooleanField(default=False)
+    is_staff = models.BooleanField(
         _('staff status'),
         default=False,
         help_text=_('Designates whether the user can log into this admin site.')
     )
-    is_active =     models.BooleanField(
+    is_active = models.BooleanField(
         _('active'),
         default=True,
-        help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.')
+        help_text=_(
+            'Designates whether this user should be treated as active. Unselect this instead of deleting accounts.')
     )
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+
+    role = models.ForeignKey(
+        Role, on_delete=models.SET_NULL, null=True, blank=True, default=1)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -61,13 +67,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-
     def __str__(self):
         return self.email
-    
 
-    
     def get_thumbnail(self):
         if self.images:
             return self.images.url
         return ''
+
+    def get_role(self):
+        """
+        Retorna el rol asignado al usuario. Si no tiene rol, devuelve 'sin rol definido'.
+        """
+        if hasattr(self, 'role') and self.role:
+            return self.role.name
+        return 'sin rol definido'

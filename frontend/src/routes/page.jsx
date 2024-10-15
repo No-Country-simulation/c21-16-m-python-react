@@ -1,35 +1,30 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../features/auth";
+import { useAuth, useGetProfile } from "@/features/auth";
 
 export const Page = () => {
-  const { isAuthenticated, isPending, isError } = useAuth();
+	const auth = useAuth();
+	const profile = useGetProfile();
 
-  return (
-    <div>
-      <Link
-        style={{
-          display: "block",
-        }}
-        to="/auth/signin"
-      >
-        Signin
-      </Link>
-      <Link
-        style={{
-          display: "block",
-        }}
-        to="/auth/signup"
-      >
-        Signup
-      </Link>
-
-      {isPending
-        ? "Loading..."
-        : isError
-        ? "Error"
-        : isAuthenticated
-        ? "Authenticated"
-        : "Not Authenticated"}
-    </div>
-  );
+	return (
+		<div>
+			<Link
+				style={{
+					display: "block",
+				}}
+				to="/auth/login"
+			>
+				Login
+			</Link>
+			<Link
+				style={{
+					display: "block",
+				}}
+				to="/auth/register"
+			>
+				Register
+			</Link>
+			<pre>auth: {JSON.stringify(auth, null, 2)}</pre>
+			<pre>profile: {JSON.stringify(profile.data, null, 2)}</pre>
+		</div>
+	);
 };
