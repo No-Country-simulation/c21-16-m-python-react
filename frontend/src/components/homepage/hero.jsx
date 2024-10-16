@@ -11,6 +11,11 @@ import derecha from '../../multimedia/generales/hderecha-landing.png';
 export default function Hero() {
   return (
     <div className="container-hero">
+      <form>
+        <h1>¿Cuál es tu comida favorita?</h1>
+          <input type="search" placeholder="Buscar..." aria-label="Buscar"/>
+          <button type="submit">Buscar</button>
+      </form>
       <img className="pngs-landing burger" src={burger} alt="" />
       <img className="pngs-landing plato-grande" src={grande} alt="" />
       <img className="pngs-landing servilleta" src={servilleta} alt="" />

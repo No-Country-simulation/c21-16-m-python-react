@@ -7,6 +7,31 @@
     position: relative;
     overflow: hidden;
 }
+.container-hero form{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    left: 10%;
+    width: max-content;
+}
+.container-hero form h1{
+    font-size: 4rem;
+    color: #ffffff;
+}
+.container-hero form input{
+    width: 80%;
+    height: 70px;
+    border-radius: 10px;
+}
+.container-hero form button{
+    position: relative;
+    left: -10%;
+    background-color: #F55A0C;
+    color: white;
+    border-radius: 10px;
+    height: 40px;
+    width: max-content;
+}
 .pngs-landing{
     position: absolute;
 }
