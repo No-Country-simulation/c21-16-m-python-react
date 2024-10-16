@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/auth/', include('users.urls')),
 
     # Rutas de la app publication
-    path('api/publication/', include('publication.urls')),
+    path('api/posts/', include('publication.urls')),
     
     path('admin/', admin.site.urls),
 ]

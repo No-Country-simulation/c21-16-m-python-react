@@ -9,8 +9,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 CustomUser = get_user_model()
 
 
-# Vista para mostrar todas las publicaciones en la página principal (home).
 class PublicationViewSet(viewsets.ModelViewSet):
+    """Muestra todas las publicaciones en la pagina principal (home)"""
     # Usa el serializer "PublicationSerializer" para convertir las publicaciones a formato JSON.
     serializer_class = PublicationSerializer
 
@@ -24,8 +24,8 @@ class PublicationViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-# Vista para mostrar las publicaciones del usuario que ha iniciado sesión (su propio perfil).
 class UserPublicationViewSet(viewsets.ModelViewSet):
+    """Muestra las publicaciones del usuario que ha iniciado sesion (publicaciones de su propio perfil)"""
     # Usa el mismo serializer que antes, "PublicationSerializer".
     serializer_class = PublicationSerializer
 
@@ -37,8 +37,9 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
         return Publication.objects.filter(id_user=user)
 
 
-# Vista para mostrar las publicaciones de otros usuarios (por ejemplo, cuando se visita el perfil de un amigo).
 class FriendPublicationViewSet(viewsets.ModelViewSet):
+    """Muestra las publicaciones de otros usuarios (por ejemplo, cuando se visita el perfil de un amigo) puede eliminarse si no se usan publicaciones privadas dentro de la pagina."""
+
     # Usa el mismo serializer para las publicaciones.
     serializer_class = PublicationSerializer
 
