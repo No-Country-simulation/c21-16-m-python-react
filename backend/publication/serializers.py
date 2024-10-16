@@ -15,10 +15,16 @@ class FilesSerializer(serializers.ModelSerializer):
 class PublicationSerializer(serializers.ModelSerializer):
     # Relaciona las publicaciones con sus archivos. El parámetro "many=True" indica que una publicación puede tener muchos archivos.
     # "read_only=True" significa que los archivos no se pueden modificar directamente desde este serializer.
-    files = FilesSerializer(many=True, read_only=True)
+    files = FilesSerializer(many=True, required=False)
 
     # Define qué campos del modelo "Publication" se enviarán en la respuesta.
     class Meta:
         model = Publication
         # Incluye los campos de la publicación.
-        fields = ['id', 'id_user', 'content', 'files', 'publication_date']
+        fields = ['id', 'content', 'files', 'publication_date']
+        read_only_fields = ['id', 'publication_date']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        return Publication.objects.create(id_user=user, **validated_data)
