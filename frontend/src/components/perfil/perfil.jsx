@@ -11,7 +11,9 @@ export const Perfil = () => {
           </div>
           <strong id="perfil-usuario">@user</strong>
           <h2 id="perfil-nombre">Benja Moreno</h2>
-          <div className="perfil-emojis"></div>
+          <div className="perfil-emojis">
+          🍇🍇🍇
+          </div>
           <button className="editar-perfil">editar perfil</button>
           <p id="perfil-descripcion">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque eos
