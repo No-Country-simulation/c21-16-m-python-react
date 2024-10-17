@@ -4,36 +4,42 @@ from .models import Files, Publication
 
 # Define un serializer para el modelo "Files" que gestiona los archivos adjuntos.
 class FilesSerializer(serializers.ModelSerializer):
-    # Define qué campos del modelo "Files" se enviarán en la respuesta.
     class Meta:
         model = Files
-        # Envía el identificador del archivo y el propio archivo.
         fields = ['id', 'file']
 
 
 # Define un serializer para el modelo "Publication" que gestiona las publicaciones.
 class PublicationSerializer(serializers.ModelSerializer):
-    # Relaciona las publicaciones con sus archivos. El parámetro "many=True" indica que una publicación puede tener muchos archivos.
     files = FilesSerializer(many=True, required=False)
 
-    # Define qué campos del modelo "Publication" se enviarán en la respuesta.
     class Meta:
         model = Publication
-        # Incluye los campos de la publicación.
-        files = ['id', 'content', 'files', 'publication_date']
+        fields = ['id', 'content', 'files', 'publication_date']
         read_only_fields = ['id', 'publication_date']
 
     def create(self, validated_data):
+        # Elimina los datos de los archivos si existen
         files_data = validated_data.pop('files', [])
+
+        # Obtiene el usuario del contexto de la solicitud
         request = self.context.get('request')
         user = request.user
 
+        # Crea la publicación
         publication = Publication.objects.create(
-            id_user=user, **validated_data)
+            id_user=user, **validated_data
+        )
 
-        # Si se han enviado archivos, crea instancias de Files y asócialas a la publicación
+        # Si hay archivos, crea instancias y asócialas a la publicación
         for file_data in files_data:
-            file_instance = Files.objects.create(**file_data)
-            publication.files.add(file_instance)
+            # Valida cada archivo usando el FilesSerializer
+            file_serializer = FilesSerializer(data=file_data)
+            if file_serializer.is_valid():
+                file_instance = file_serializer.save()
+                publication.files.add(file_instance)
+            else:
+                # Lanza un error si el archivo no es válido
+                raise serializers.ValidationError(file_serializer.errors)
 
         return publication
