@@ -28,7 +28,7 @@ export const Layout = () => {
                 <Nav.Link href="#features">Muro</Nav.Link>
                 <Nav.Link href="#pricing">Personas</Nav.Link>
                 <NavDropdown title="Mi Perfil" id="collapsible-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Editar Perfil</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/perfil">Editar Perfil</NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.2">
                     Mis gustos
                   </NavDropdown.Item>

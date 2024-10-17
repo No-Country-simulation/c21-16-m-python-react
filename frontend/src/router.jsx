@@ -9,6 +9,7 @@ import  * as Signin from "./routes/auth/signin";
 import  * as Signup from "./routes/auth/signup";
 import { Layout } from "./routes/components/layout/layout";
 import { Home } from "./components/homepage/home";
+import { Perfil } from "./components/perfil/perfil";
 
 const ErrorBoundary = () => {
   let error = useRouteError();
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signup",  // Página de registro
         element: <Signup.Page />,
+      },
+      {
+        path: "/perfil",  
+        element: <Perfil/>,
       },
     ],
   },
