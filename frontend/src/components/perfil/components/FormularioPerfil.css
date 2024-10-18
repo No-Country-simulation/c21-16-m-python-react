@@ -1,0 +1,46 @@
+#formulario-editar-perfil {
+  margin: auto;
+  height: 70%;
+  max-height: 90%;
+  flex: 0.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.container-form-foto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#formulario-editar-perfil .container-dato {
+  display: flex;
+  flex-direction: column;
+}
+.container-form-foto label {
+  width: max-content;
+}
+
+#profileImage {
+  width: 50%;
+}
+.input-editar-perfil {
+  background-color: #b1b1b1b0;
+  width: 60%;
+  border: none;
+}
+.cambiar-emojis-btn {
+  border: solid rgb(117, 117, 117) 1px;
+  border-radius: 5px;
+  width: max-content;
+}
+.guardar-cambios-btn {
+  background-color: #ff7926;
+  width: 80%;
+  color: white;
+  border: none;
+  margin: 0 auto;
+  font-size: 1.2rem;
+}
+.guardar-cambios-btn:hover {
+  background-color: orangered;
+}

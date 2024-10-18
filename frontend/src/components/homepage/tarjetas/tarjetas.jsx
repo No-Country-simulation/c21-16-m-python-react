@@ -28,8 +28,8 @@ export const Tarjetas = () => {
   ];
   return (
     <div className="container-tarjetas">
-      {datosTarjetas.map((objeto) => (
-        <Tarjeta datos={objeto} />
+      {datosTarjetas.map((objeto,index) => (
+        <Tarjeta datos={objeto} key={index}/>
       ))}
     </div>
   );
