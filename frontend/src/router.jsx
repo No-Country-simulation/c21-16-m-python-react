@@ -7,7 +7,13 @@ import { RedirectAuthenticated } from "./shared/components";
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Home.Page />,
+		element: <Home.Layout />,
+		children: [
+			{
+				index: true,
+				element: <Home.Page />,
+			},
+		],
 	},
 	{
 		path: "/auth/login",
