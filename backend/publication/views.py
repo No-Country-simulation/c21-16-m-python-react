@@ -1,10 +1,11 @@
-from .models import Publication
+from .models import Publication, Files
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from .serializers import PublicationSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
 
 CustomUser = get_user_model()
 
@@ -31,10 +32,16 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
 
     # Solo permite que los usuarios autenticados puedan ver sus propias publicaciones.
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_queryset(self):
         user = self.request.user
+        #files = Files.objects.filter(publication=id)
         return Publication.objects.filter(id_user=user)
+
+    def perform_create(self, serializer):
+        files = self.request.FILES.getlist('files[]')
+        serializer.save(id_user=self.request.user, files=files)
 
 
 class FriendPublicationViewSet(viewsets.ModelViewSet):
