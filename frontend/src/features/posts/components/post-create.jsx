@@ -5,7 +5,7 @@ import { PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useCreatePost } from "../queries";
 import { postInitialValues, postSchema } from "../schemas";
 
-const MAX_UPLOAD_FILES = 5;
+const MAX_UPLOAD_FILES = 10;
 
 export const PostCreate = () => {
 	const [idx, setIdx] = useState(0);
@@ -108,7 +108,7 @@ export const PostCreate = () => {
 							onChange={handleFileChange}
 							value=""
 							type="file"
-							accept="image/*"
+							accept="image/*,video/*"
 							isInvalid={formik.touched.files && formik.errors.files}
 							disabled={isPending || isMaxUploadFiles}
 							multiple
