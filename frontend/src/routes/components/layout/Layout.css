@@ -12,3 +12,11 @@ header {
   width: 100vw;
   overflow-x: hidden;
 }
+#LOGO-NAME{
+  display: flex;
+  flex-direction: column;
+}
+#slogan-logo-name{
+  font-size: 0.6rem;
+  color: orangered;
+}

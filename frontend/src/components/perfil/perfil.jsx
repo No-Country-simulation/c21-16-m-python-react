@@ -31,7 +31,8 @@ export const Perfil = () => {
         </article>
         <article className="item-perfil tus-gustos">
           <h5 className="container-titulo">Tus gustos</h5>
-          <div className="info-articulos"></div>
+          <div className="info-articulos">
+          </div>
         </article>
         <article className="item-perfil tus-amigos">
           <h5 className="container-titulo">Tus amigos</h5>

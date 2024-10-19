@@ -21,7 +21,7 @@ export const Layout = () => {
           className="bg-body-tertiary navbar-header"
         >
           <Container>
-            <Navbar.Brand as={Link} to="/">PostPlate</Navbar.Brand>
+            <Navbar.Brand as={Link} to="/" id="LOGO-NAME" >PostPlate</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
