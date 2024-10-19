@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Modal from "react-modal"; // Importa React Modal
 import "./FormularioPerfil.css";
+import papelera from "../../../multimedia/SVGs/TRASH.svg";
 import fondo_modal from "../../../multimedia/comidas/food_emoji.jpg";
 
 // Estilos del modal
@@ -272,7 +273,10 @@ const FormularioPerfil = () => {
           <div className="emojis-seleccionados">
             {emojiState[0]}&nbsp;{emojiState[1]}&nbsp;{emojiState[2]}
           </div>
-          <button onClick={() => limpiarEmojis()}>Limpiar</button>
+          <button onClick={() => limpiarEmojis()}>
+            Limpiar
+            <img src={papelera} />{" "}
+          </button>
         </div>
         <div className="container-btns-emojis">
           <button onClick={closeModal}>Guardar</button>
