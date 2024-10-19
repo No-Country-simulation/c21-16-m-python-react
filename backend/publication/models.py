@@ -1,3 +1,7 @@
+import cloudinary
+import cloudinary.uploader
+import cloudinary.models
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -6,30 +10,22 @@ from django.core.exceptions import ValidationError
 CustomUser = get_user_model()
 
 
-def blog_thumbnail_directory(instance, filename):
+def blog_thumbnail_directory(instance, filename=None):
     """
-    Define la ruta donde se guardará el archivo subido, organizando en carpetas según el nombre del usuario
-    y el tipo de archivo (imagen o video).
+    Define la ruta de la carpeta en Cloudinary donde se subirá el archivo, 
+    organizando en carpetas según el nombre del usuario y el tipo de archivo (imagen o video).
     """
-    # Obtén el nombre de usuario del objeto de publicación (instance).
-    # Asumiendo que id_user es un objeto CustomUser con un atributo 'username'
-    user_name = instance.publication.id_user.username
+    if not filename:
+        filename = instance.name if hasattr(instance, 'name') else 'untitled'
 
-    # Obtén la extensión del archivo.
-    # Obtiene la extensión del archivo y la convierte a minúsculas.
+    user_name = instance.publication.id_user.username if hasattr(
+        instance, 'publication') else 'unknown'
+
     ext = filename.split('.')[-1].lower()
 
-    # Define la carpeta según la extensión del archivo.
-    # Extensiones comunes de imágenes.
-    if ext in ['jpg', 'jpeg', 'png', 'gif']:
-        folder = 'imagenes'
-    elif ext in ['mp4', 'mov', 'avi', 'mkv']:  # Extensiones comunes de videos.
-        folder = 'videos'
-    else:
-        # Para manejar archivos que no son ni imágenes ni videos.
-        folder = 'otros'
+    folder = 'imagenes' if ext in ['jpg', 'jpeg', 'png', 'gif'] else \
+             'videos' if ext in ['mp4', 'mov', 'avi', 'mkv'] else 'otros'
 
-    # Retorna la ruta donde se guardará el archivo.
     return f'publications/{user_name}/{folder}/{filename}'
 
 
@@ -50,10 +46,18 @@ class Publication(models.Model):
             # Lanza un error si se intenta añadir más de 10 archivos.
             raise ValidationError("No more than 10 files are allowed.")
 
+    def delete(self, *args, **kwargs):
+        for file in self.files_set.all():
+            if file.file_public_id:
+                cloudinary.uploader.destroy(file.file_public_id)
+        super().delete(*args, **kwargs)
+
 
 # Define el modelo "Files" que representa los archivos adjuntos a una publicación (como imágenes o videos).
 class Files(models.Model):
-    # Campo que almacena el archivo adjunto (imagen, video, etc.).
     publication = models.ForeignKey(
         Publication, on_delete=models.CASCADE, related_name='files_set')
-    file = models.FileField(upload_to=blog_thumbnail_directory)
+
+    # Cambia el campo FileField por CloudinaryField para almacenar los archivos en Cloudinary.
+    file = models.URLField(max_length=500)
+    file_public_id = models.CharField(max_length=100, blank=True, null=True)
