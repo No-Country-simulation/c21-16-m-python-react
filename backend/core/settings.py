@@ -47,9 +47,6 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
     'drf_spectacular_sidecar',
-    'corsheaders',
-    # Garantiza que el refresh token anterior quede invalidado una vez que se rota, lo que evita que se usen tokens antiguos.
-    'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',  # Documentation
     'corsheaders',
     # Garantiza que el refresh token anterior quede invalidado una vez que se rota, lo que evita que se usen tokens antiguos.
