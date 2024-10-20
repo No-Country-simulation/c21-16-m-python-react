@@ -1,3 +1,5 @@
+import cloudinary.uploader
+
 from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.response import Response
@@ -6,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import LoginEmailSerializer, UserEmailSerializer, ProfileSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 CustomUser = get_user_model()
@@ -55,6 +58,7 @@ class ProfileViewSet(viewsets.ViewSet):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'put', 'delete']
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self):
         """Obtiene el perfil del usuario autenticado."""
@@ -70,7 +74,11 @@ class ProfileViewSet(viewsets.ViewSet):
         """Actualiza el perfil del usuario autenticado."""
         user = self.get_object()
         serializer = self.serializer_class(
-            user, data=request.data, partial=True)
+            user,
+            data=request.data,
+            partial=True,
+            context={'request': request}
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -79,5 +87,8 @@ class ProfileViewSet(viewsets.ViewSet):
     def destroy(self, request, *args, **kwargs):
         """Elimina el perfil del usuario autenticado."""
         user = self.get_object()
+        if user.images:
+            public_id = user.images.split('/')[-1].split('.')[0]
+            cloudinary.uploader.destroy(public_id)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

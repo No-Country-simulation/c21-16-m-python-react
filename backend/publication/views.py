@@ -36,12 +36,17 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        #files = Files.objects.filter(publication=id)
+        # files = Files.objects.filter(publication=id)
         return Publication.objects.filter(id_user=user)
 
     def perform_create(self, serializer):
         files = self.request.FILES.getlist('files[]')
         serializer.save(id_user=self.request.user, files=files)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class FriendPublicationViewSet(viewsets.ModelViewSet):
