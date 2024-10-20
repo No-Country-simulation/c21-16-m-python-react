@@ -10,6 +10,7 @@ import  * as Signup from "./routes/auth/signup";
 import { Layout } from "./routes/components/layout/layout";
 import { Home } from "./components/homepage/home";
 import { Perfil } from "./components/perfil/perfil";
+import { Autenticacion } from "./pages/registro/autenticacion";
 
 const ErrorBoundary = () => {
   let error = useRouteError();
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
         path: "/perfil",  
         element: <Perfil/>,
       },
+      {
+        path:"/registro",
+        element:<Autenticacion/>
+      }
     ],
   },
 ]);
