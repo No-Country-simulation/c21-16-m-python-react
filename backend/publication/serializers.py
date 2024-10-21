@@ -22,11 +22,12 @@ class PublicationSerializer(serializers.ModelSerializer):
     )
     file_public_id = serializers.CharField(read_only=True)
     files_set = FilesSerializer(many=True, read_only=True)
+    id_user = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Publication
         fields = ['id', 'content', 'publication_date',
-                  'files', 'files_set', 'file_public_id']
+                  'files', 'files_set', 'file_public_id', 'id_user']
 
     def create(self, validated_data):
         files_data = validated_data.pop('files', [])
