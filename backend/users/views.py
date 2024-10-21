@@ -92,3 +92,17 @@ class ProfileViewSet(viewsets.ViewSet):
             cloudinary.uploader.destroy(public_id)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Vista para ver el perfil de otras cuentas
+class FriendProfileViewSet(viewsets.ViewSet):
+    """Muestra el perfil de un amigo (otro usuario)."""
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden ver perfiles
+    http_method_names = ['get']
+
+    def retrieve(self, request, pk=None):
+        """Obtiene el perfil de un amigo usando su ID."""
+        # Busca el perfil del usuario con el ID proporcionado o lanza un error 404 si no existe.
+        user = get_object_or_404(CustomUser, pk=pk)
+        serializer = self.serializer_class(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
