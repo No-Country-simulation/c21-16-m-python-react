@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Button, Carousel, Col, Form, Image, Row } from "react-bootstrap";
+import { Button, Carousel, Col, Form, Image, Ratio, Row } from "react-bootstrap";
 import { useFormik } from "formik";
 import { PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useCreatePost } from "../queries";
 import { postInitialValues, postSchema } from "../schemas";
+import { toast } from "sonner";
 
 const MAX_UPLOAD_FILES = 10;
 
@@ -24,6 +25,7 @@ export const PostCreate = () => {
 			mutate(formData, {
 				onSuccess() {
 					formik.resetForm();
+					toast.success("Post created successfully");
 				},
 			});
 		},
@@ -69,18 +71,20 @@ export const PostCreate = () => {
 			</Row>
 
 			{formik.values.files.length > 0 ? (
-				<Row className="my-2">
+				<Row className="mt-2">
 					<Col>
 						<Carousel activeIndex={idx} onSelect={(index) => setIdx(index)} wrap={false}>
 							{formik.values.files.map((file, index) => (
 								<Carousel.Item key={index}>
-									<Image src={URL.createObjectURL(file)} thumbnail fluid />
+									<Ratio aspectRatio="16x9">
+										<Image src={URL.createObjectURL(file)} thumbnail fluid className="object-fit-contain" />
+									</Ratio>
 									<Carousel.Caption>
-										<Button variant="danger" size="sm" onClick={() => handleRemoveFile(index)}>
+										<Button variant="danger" onClick={() => handleRemoveFile(index)}>
 											<TrashIcon
 												style={{
-													width: "20px",
-													height: "20px",
+													width: "24px",
+													height: "24px",
 												}}
 											/>
 										</Button>
@@ -95,11 +99,11 @@ export const PostCreate = () => {
 			<Row className="mt-2">
 				<Col>
 					<Form.Group controlId="files">
-						<Form.Label className="btn btn-outline-primary btn-sm">
+						<Form.Label className="btn btn-outline-primary m-0">
 							<PhotoIcon
 								style={{
-									width: "20px",
-									height: "20px",
+									width: "24px",
+									height: "24px",
 								}}
 							/>
 						</Form.Label>
