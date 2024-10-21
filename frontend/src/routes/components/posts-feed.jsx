@@ -1,21 +1,25 @@
 import { Stack } from "react-bootstrap";
-import { PostItem, PostSkeleton, useGetUserPosts } from "@/features/posts";
+import { PostItem, PostSkeleton, useGetFeedPosts } from "@/features/posts";
 
-export const PostList = () => {
-	const { data: posts, isPending, isError } = useGetUserPosts();
+export const PostsFeed = () => {
+	const { data: posts, isPending, isError } = useGetFeedPosts();
 
 	return isPending ? (
-		<Stack as="section" gap={3}>
+		<Stack gap={2}>
 			{new Array(3).fill(0).map((_, index) => (
 				<PostSkeleton key={index} />
 			))}
 		</Stack>
 	) : isError ? (
-		<section>Error</section>
+		<div>
+			<p>Error</p>
+		</div>
 	) : posts.length === 0 ? (
-		<section>No posts yet.</section>
+		<div>
+			<p>No posts yet</p>
+		</div>
 	) : (
-		<Stack as="section" gap={3}>
+		<Stack gap={3}>
 			{posts.map((post) => (
 				<PostItem key={post.id} post={post} />
 			))}

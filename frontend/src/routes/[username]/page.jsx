@@ -5,10 +5,12 @@ export const Page = () => {
 	const { username } = useParams();
 
 	return (
-		<section>
-			<p>
-				Welcome, <strong>{username}</strong>!
-			</p>
+		<>
+			<section className="mt-3">
+				<p>
+					Welcome, <strong>{username}</strong>!
+				</p>
+			</section>
 			<hr
 				style={{
 					marginLeft: "-0.75rem",
@@ -16,6 +18,6 @@ export const Page = () => {
 				}}
 			></hr>
 			<PostList />
-		</section>
+		</>
 	);
 };
