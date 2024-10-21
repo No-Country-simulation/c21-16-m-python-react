@@ -8,7 +8,7 @@ export const Providers = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Routes />
-			<Toaster />
+			<Toaster richColors />
 			<ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
 		</QueryClientProvider>
 	);

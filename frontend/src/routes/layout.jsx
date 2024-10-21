@@ -4,7 +4,6 @@ import { Col, Container, Row } from "react-bootstrap";
 export const Layout = () => {
 	return (
 		<>
-			<header>Header</header>
 			<Container className="h-100">
 				<Row className="h-100">
 					<Col xs={3} className="border-end">
@@ -18,7 +17,6 @@ export const Layout = () => {
 					</Col>
 				</Row>
 			</Container>
-			<footer>Footer</footer>
 		</>
 	);
 };
