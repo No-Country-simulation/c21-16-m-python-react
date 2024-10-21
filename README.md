@@ -10,7 +10,7 @@ Este proyecto es una red social enfocada en la gastronomía, donde los usuarios 
 - **Carlos Ayala** - Frontend - [LinkedIn](#)
 - **Benjamin Moreno** - Frontend - [LinkedIn](#)
 - **Rafael Gauna** - Backend - [LinkedIn](#)
-- **Ramón Pérez** - Backend - [LinkedIn](www.linkedin.com/in/ramón-felipe-perez-osorio)
+- **Ramón Pérez** - Backend - [LinkedIn](https://www.linkedin.com/in/ram%C3%B3n-felipe-perez-osorio/)
 
 ## Tecnologías Utilizadas
 
