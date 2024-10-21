@@ -15,7 +15,6 @@ class RegisterEmailViewSet(viewsets.ModelViewSet):
     serializer_class = UserEmailSerializer
     queryset = CustomUser.objects.all()
     permission_classes = [AllowAny]
-    http_method_names = ['post']
 
     def create(self, request, *args, **kwargs):
         if CustomUser.objects.filter(email=request.data.get('email')).exists():
@@ -27,8 +26,7 @@ class RegisterEmailViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        message = {"message": "Register successfully"}
-        return Response(message, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class LoginEmailViewSet(viewsets.ViewSet):
@@ -69,8 +67,7 @@ class ProfileViewSet(viewsets.ViewSet):
     def update(self, request, *args, **kwargs):
         """Actualiza el perfil del usuario autenticado."""
         user = self.get_object()
-        serializer = self.serializer_class(
-            user, data=request.data, partial=True)
+        serializer = self.serializer_class(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
