@@ -1,7 +1,7 @@
 import { BASE_API_URL } from "@/config";
 import { fetcher } from "@/shared/utils";
 
-export const getAll = (accessToken) => {
+export const getAllUser = (accessToken) => {
 	return fetcher(`${BASE_API_URL}/api/posts/user-publications/`, {
 		method: "GET",
 		headers: {
@@ -11,8 +11,8 @@ export const getAll = (accessToken) => {
 	});
 };
 
-export const getOne = (accessToken, id) => {
-	return fetcher(`${BASE_API_URL}/api/publication/user-publications/${id}/`, {
+export const getOneUser = (accessToken, id) => {
+	return fetcher(`${BASE_API_URL}/api/posts/user-publications/${id}/`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
