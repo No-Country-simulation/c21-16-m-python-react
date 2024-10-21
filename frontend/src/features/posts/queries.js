@@ -1,20 +1,20 @@
 import { useParams } from "react-router-dom";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useAuth } from "../auth";
-import { create, getAll, getOne } from "./api";
+import { create, getAllUser, getOneUser } from "./api";
 
 export const postKeys = {
 	key: () => ["posts"],
-	getAll: () => [...postKeys.key(), "get-all"],
+	getAllUser: () => [...postKeys.key(), "get-all-user"],
 	getOne: (id) => [...postKeys.key(), "get-one", id],
 };
 
-export const useGetPosts = () => {
+export const useGetUserPosts = () => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
-		queryKey: postKeys.getAll(),
-		queryFn: () => getAll(accessToken),
+		queryKey: postKeys.getAllUser(),
+		queryFn: () => getAllUser(accessToken),
 		enabled: !!accessToken,
 	});
 };
@@ -26,7 +26,7 @@ export const useGetPost = () => {
 
 	return useQuery({
 		queryKey: postKeys.getOne(id),
-		queryFn: () => getOne(id),
+		queryFn: () => getOneUser(id),
 		enabled: accessToken && id,
 	});
 };
@@ -39,7 +39,7 @@ export const useCreatePost = () => {
 	return useMutation({
 		mutationFn: (values) => create(accessToken, values),
 		onSuccess: (post) => {
-			queryClient.setQueryData(postKeys.getAll(), (old) => {
+			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
 				if (!old) return [post];
 				return [...old, post];
 			});

@@ -1,10 +1,9 @@
-import { PostCreate, PostList } from "@/features/posts";
+import { PostCreate } from "@/features/posts";
 
 export const Page = () => {
 	return (
 		<main>
 			<PostCreate />
-			<PostList />
 		</main>
 	);
 };

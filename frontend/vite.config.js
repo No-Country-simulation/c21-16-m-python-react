@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		server: {
-			port: +env.VITE_PORT,
+			port: +env.VITE_DEV_PORT,
 			open: true,
 		},
 		resolve: {

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Button, Carousel, Col, Form, Image, Row } from "react-bootstrap";
+import { Button, Card, Carousel, Col, Form, Image, Ratio, Row } from "react-bootstrap";
 import { useFormik } from "formik";
 import { PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useCreatePost } from "../queries";
 import { postInitialValues, postSchema } from "../schemas";
 
-const MAX_UPLOAD_FILES = 5;
+const MAX_UPLOAD_FILES = 10;
 
 export const PostCreate = () => {
 	const [idx, setIdx] = useState(0);
@@ -51,78 +51,84 @@ export const PostCreate = () => {
 	const isMaxUploadFiles = formik.values.files.length >= MAX_UPLOAD_FILES;
 
 	return (
-		<Form onSubmit={formik.handleSubmit} noValidate>
-			<Row>
-				<Col>
-					<Form.Group controlId="content">
-						<Form.Control
-							{...formik.getFieldProps("content")}
-							as="textarea"
-							rows={4}
-							isInvalid={formik.touched.content && formik.errors.content}
-							placeholder="What's going on?"
-							disabled={isPending}
-						/>
-						<Form.Control.Feedback type="invalid">{formik.errors.content}</Form.Control.Feedback>
-					</Form.Group>
-				</Col>
-			</Row>
+		<Card>
+			<Card.Body>
+				<Form onSubmit={formik.handleSubmit} noValidate>
+					<Row>
+						<Col>
+							<Form.Group controlId="content">
+								<Form.Control
+									{...formik.getFieldProps("content")}
+									as="textarea"
+									rows={4}
+									isInvalid={formik.touched.content && formik.errors.content}
+									placeholder="What's going on?"
+									disabled={isPending}
+								/>
+								<Form.Control.Feedback type="invalid">{formik.errors.content}</Form.Control.Feedback>
+							</Form.Group>
+						</Col>
+					</Row>
 
-			{formik.values.files.length > 0 ? (
-				<Row className="my-2">
-					<Col>
-						<Carousel activeIndex={idx} onSelect={(index) => setIdx(index)} wrap={false}>
-							{formik.values.files.map((file, index) => (
-								<Carousel.Item key={index}>
-									<Image src={URL.createObjectURL(file)} thumbnail fluid />
-									<Carousel.Caption>
-										<Button variant="danger" size="sm" onClick={() => handleRemoveFile(index)}>
-											<TrashIcon
-												style={{
-													width: "20px",
-													height: "20px",
-												}}
-											/>
-										</Button>
-									</Carousel.Caption>
-								</Carousel.Item>
-							))}
-						</Carousel>
-					</Col>
-				</Row>
-			) : null}
+					{formik.values.files.length > 0 ? (
+						<Row className="mt-3">
+							<Col>
+								<Carousel activeIndex={idx} onSelect={(index) => setIdx(index)} wrap={false}>
+									{formik.values.files.map((file, index) => (
+										<Carousel.Item key={index}>
+											<Ratio aspectRatio="16x9">
+												<Image src={URL.createObjectURL(file)} thumbnail fluid className="object-fit-contain" />
+											</Ratio>
+											<Carousel.Caption>
+												<Button variant="danger" size="sm" onClick={() => handleRemoveFile(index)}>
+													<TrashIcon
+														style={{
+															width: "20px",
+															height: "20px",
+														}}
+													/>
+												</Button>
+											</Carousel.Caption>
+										</Carousel.Item>
+									))}
+								</Carousel>
+							</Col>
+						</Row>
+					) : null}
 
-			<Row className="mt-2">
-				<Col>
-					<Form.Group controlId="files">
-						<Form.Label className="btn btn-outline-primary btn-sm">
-							<PhotoIcon
-								style={{
-									width: "20px",
-									height: "20px",
-								}}
-							/>
-						</Form.Label>
-						<Form.Control
-							{...formik.getFieldProps("files")}
-							onChange={handleFileChange}
-							value=""
-							type="file"
-							accept="image/*"
-							isInvalid={formik.touched.files && formik.errors.files}
-							disabled={isPending || isMaxUploadFiles}
-							multiple
-							hidden
-						/>
-						<Form.Control.Feedback type="invalid">{formik.errors.files}</Form.Control.Feedback>
-					</Form.Group>
-				</Col>
-				<Col className="text-end">
-					<Button type="submit" disabled={isPending}>
-						{isPending ? "Posting..." : "Post"}
-					</Button>
-				</Col>
-			</Row>
-		</Form>
+					<Row className="mt-3">
+						<Col>
+							<Form.Group controlId="files">
+								<Form.Label className="btn btn-outline-primary btn-sm">
+									<PhotoIcon
+										style={{
+											width: "20px",
+											height: "20px",
+										}}
+									/>
+								</Form.Label>
+								<Form.Control
+									{...formik.getFieldProps("files")}
+									onChange={handleFileChange}
+									value=""
+									type="file"
+									accept="image/*,video/*"
+									isInvalid={formik.touched.files && formik.errors.files}
+									disabled={isPending || isMaxUploadFiles}
+									multiple
+									hidden
+								/>
+								<Form.Control.Feedback type="invalid">{formik.errors.files}</Form.Control.Feedback>
+							</Form.Group>
+						</Col>
+						<Col className="text-end">
+							<Button type="submit" disabled={isPending}>
+								{isPending ? "Posting..." : "Post"}
+							</Button>
+						</Col>
+					</Row>
+				</Form>
+			</Card.Body>
+		</Card>
 	);
 };
