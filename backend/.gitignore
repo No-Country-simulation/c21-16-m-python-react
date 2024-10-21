@@ -24,4 +24,3 @@ ENV/
 
 # Dependency directories
 node_modules/
-__pycache__/

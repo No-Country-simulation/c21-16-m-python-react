@@ -35,13 +35,18 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'core',
     'users',
+    'publication',
+    'roles',
+    'friendship',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
-    'drf_yasg',  # Documentation
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     'corsheaders', 
+    'rest_framework_simplejwt.token_blacklist', #Garantiza que el refresh token anterior quede invalidado una vez que se rota, lo que evita que se usen tokens antiguos.
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -49,6 +54,7 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'core.urls'
 
@@ -81,12 +89,35 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+
+# -------DB SQL-LITE------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+#------DB SQL SERVER-------
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'DB-NOCOUNTRY',  # El nombre de tu base de datos
+#         'USER': '***',  # Deja en blanco si usas autenticación de Windows
+#         'PASSWORD': '***',  # Deja en blanco si usas autenticación de Windows
+#         'HOST': '***',  # El nombre de tu servidor
+#         'PORT': '',  # El puerto por defecto de SQL Server
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',  # Cambia el driver a la versión 
+#             'trusted_connection': 'yes',  # Autenticación de Windows
+#             'TrustServerCertificate': 'yes',  # Confía en el certificado del servidor
+#             'Encrypt': 'False',  # Desactiva la encriptación SSL
+#         },
+#     }
+# }
+
 
 
 # Password validation
@@ -125,6 +156,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -144,6 +178,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # Solo usuarios autenticados por defecto
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # Para la documentación automática
 }
 
 
@@ -153,4 +188,15 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,  # Rotación automática de tokens
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),  # Prefijo para el token en las cabeceras HTTP
+}
+
+#Configuracion de 'drf_spectacular_sidecar' para la DOC
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Documentación de mi API',
+    'DESCRIPTION': 'Descripción breve de la API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',  # Para usar los archivos locales
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }

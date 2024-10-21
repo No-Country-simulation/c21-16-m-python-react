@@ -1,35 +1,18 @@
-import { Link } from "react-router-dom";
-import { useAuth } from "../features/auth";
+import { PostCreate } from "@/features/posts";
+import { PostsFeed } from "./components/posts-feed";
 
 export const Page = () => {
-  const { isAuthenticated, isPending, isError } = useAuth();
-
-  return (
-    <div>
-      <Link
-        style={{
-          display: "block",
-        }}
-        to="/auth/signin"
-      >
-        Signin
-      </Link>
-      <Link
-        style={{
-          display: "block",
-        }}
-        to="/auth/signup"
-      >
-        Signup
-      </Link>
-
-      {isPending
-        ? "Loading..."
-        : isError
-        ? "Error"
-        : isAuthenticated
-        ? "Authenticated"
-        : "Not Authenticated"}
-    </div>
-  );
+	return (
+		<>
+			<div className="mt-3"></div>
+			<PostCreate />
+			<hr
+				style={{
+					marginLeft: "-0.75rem",
+					marginRight: "-0.75rem",
+				}}
+			></hr>
+			<PostsFeed />
+		</>
+	);
 };
