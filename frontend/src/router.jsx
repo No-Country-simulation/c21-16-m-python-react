@@ -1,24 +1,13 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { RedirectAuthenticated } from "./shared/components";
 import * as Home from "./routes";
 import * as Login from "./routes/auth/login";
 import * as Register from "./routes/auth/register";
-import * as Profile from "./routes/[username]";
+import { RedirectAuthenticated } from "./shared/components";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Home.Layout />,
-		children: [
-			{
-				index: true,
-				element: <Home.Page />,
-			},
-			{
-				path: ":username",
-				element: <Profile.Page />,
-			},
-		],
+		element: <Home.Page />,
 	},
 	{
 		path: "/auth/login",

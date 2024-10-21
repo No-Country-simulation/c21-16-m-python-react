@@ -13,7 +13,7 @@ def blog_thumbnail_directory(instance, filename):
     """
     # Obtén el nombre de usuario del objeto de publicación (instance).
     # Asumiendo que id_user es un objeto CustomUser con un atributo 'username'
-    user_name = instance.publication.id_user.username
+    user_name = instance.id_user.username
 
     # Obtén la extensión del archivo.
     # Obtiene la extensión del archivo y la convierte a minúsculas.
@@ -30,7 +30,7 @@ def blog_thumbnail_directory(instance, filename):
         folder = 'otros'
 
     # Retorna la ruta donde se guardará el archivo.
-    return f'publications/{user_name}/{folder}/{filename}'
+    return f'publication/{user_name}/{folder}/{filename}'
 
 
 # Define el modelo "Publication" que representa una publicación en la aplicación.
@@ -41,12 +41,16 @@ class Publication(models.Model):
     # Campo que almacena el contenido de la publicación (como texto).
     content = models.TextField()
 
+    # Relación con otro modelo llamado "Files". Permite que una publicación tenga varios archivos adjuntos, como imágenes o videos.
+    # El parámetro "blank=True" indica que no es obligatorio que haya archivos en la publicación.
+    files = models.ManyToManyField('Files', blank=True)
+
     # Guarda la fecha y hora en la que la publicación se creó automáticamente.
     publication_date = models.DateTimeField(auto_now_add=True)
 
     # Método para validar que una publicación no tenga más de 10 archivos adjuntos.
     def clean(self):
-        if self.files_set.count() > 10:
+        if self.files.count() > 10:
             # Lanza un error si se intenta añadir más de 10 archivos.
             raise ValidationError("No more than 10 files are allowed.")
 
@@ -54,6 +58,4 @@ class Publication(models.Model):
 # Define el modelo "Files" que representa los archivos adjuntos a una publicación (como imágenes o videos).
 class Files(models.Model):
     # Campo que almacena el archivo adjunto (imagen, video, etc.).
-    publication = models.ForeignKey(
-        Publication, on_delete=models.CASCADE, related_name='files_set')
     file = models.FileField(upload_to=blog_thumbnail_directory)

@@ -37,14 +37,12 @@ PROJECT_APPS = [
     'users',
     'publication',
     'roles',
-    'friendship',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
-    'drf_spectacular',
-    'drf_spectacular_sidecar',
+    'drf_yasg',  # Documentation
     'corsheaders', 
     'rest_framework_simplejwt.token_blacklist', #Garantiza que el refresh token anterior quede invalidado una vez que se rota, lo que evita que se usen tokens antiguos.
 ]
@@ -156,9 +154,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -178,7 +173,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # Solo usuarios autenticados por defecto
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # Para la documentación automática
 }
 
 
@@ -188,15 +182,4 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,  # Rotación automática de tokens
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),  # Prefijo para el token en las cabeceras HTTP
-}
-
-#Configuracion de 'drf_spectacular_sidecar' para la DOC
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'Documentación de mi API',
-    'DESCRIPTION': 'Descripción breve de la API',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-    'SWAGGER_UI_DIST': 'SIDECAR',  # Para usar los archivos locales
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
 }
