@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { Card, CardHeader } from "react-bootstrap";
+import { Card, CardHeader, Col, Row } from "react-bootstrap";
 import { PostGallery } from "./post-gallery";
+import { PostOptions } from "./post-options";
 
 export const PostItem = ({ post }) => {
 	const navigate = useNavigate();
@@ -8,7 +9,8 @@ export const PostItem = ({ post }) => {
 	const handleBody = (event) => {
 		const targets = ["card-body", "card-text"];
 		if (targets.some((target) => event.target.classList.contains(target))) {
-			navigate(`posts/${post.id}`);
+			// navigate(`posts/${post.id}`);
+			alert("#TODO: Navigate to post");
 		}
 	};
 
@@ -28,7 +30,14 @@ export const PostItem = ({ post }) => {
 					<p className="text-secondary mb-0 lh-1">@Legger</p>
 				</div>
 			</CardHeader> */}
-			<CardHeader>#TODO: Header</CardHeader>
+			<CardHeader>
+				<Row>
+					<Col xs={10}>#TODO: Header - User</Col>
+					<Col xs={2} className="text-end">
+						<PostOptions post={post} />
+					</Col>
+				</Row>
+			</CardHeader>
 			<Card.Body role="button" onClick={handleBody}>
 				<Card.Text>{post.content}</Card.Text>
 				<PostGallery files={post.files_set} />
