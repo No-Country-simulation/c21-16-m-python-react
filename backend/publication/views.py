@@ -1,11 +1,17 @@
+from .models import Publication, Files
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Publication
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from .serializers import PublicationSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
+
+CustomUser = get_user_model()
 
 
-# Vista para mostrar todas las publicaciones en la página principal (home).
 class PublicationViewSet(viewsets.ModelViewSet):
+    """Muestra todas las publicaciones en la pagina principal (home)"""
     # Usa el serializer "PublicationSerializer" para convertir las publicaciones a formato JSON.
     serializer_class = PublicationSerializer
 
@@ -19,22 +25,28 @@ class PublicationViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-# Vista para mostrar las publicaciones del usuario que ha iniciado sesión (su propio perfil).
 class UserPublicationViewSet(viewsets.ModelViewSet):
+    """Muestra las publicaciones del usuario que ha iniciado sesion (publicaciones de su propio perfil)"""
     # Usa el mismo serializer que antes, "PublicationSerializer".
     serializer_class = PublicationSerializer
 
-    # Solo permite que los usuarios autenticados (que han iniciado sesión) puedan ver sus propias publicaciones.
+    # Solo permite que los usuarios autenticados puedan ver sus propias publicaciones.
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
-    # Define que solo se van a mostrar las publicaciones del usuario que ha iniciado sesión.
     def get_queryset(self):
-        # Filtra las publicaciones para que solo se muestren las que pertenecen al usuario actual.
-        return Publication.objects.filter(email=self.request.user)
+        user = self.request.user
+        #files = Files.objects.filter(publication=id)
+        return Publication.objects.filter(id_user=user)
+
+    def perform_create(self, serializer):
+        files = self.request.FILES.getlist('files[]')
+        serializer.save(id_user=self.request.user, files=files)
 
 
-# Vista para mostrar las publicaciones de otros usuarios (por ejemplo, cuando se visita el perfil de un amigo).
 class FriendPublicationViewSet(viewsets.ModelViewSet):
+    """Muestra las publicaciones de otros usuarios (por ejemplo, cuando se visita el perfil de un amigo) puede eliminarse si no se usan publicaciones privadas dentro de la pagina."""
+
     # Usa el mismo serializer para las publicaciones.
     serializer_class = PublicationSerializer
 

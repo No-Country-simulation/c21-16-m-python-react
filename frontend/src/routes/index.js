@@ -1,2 +1,2 @@
 export * from "./page";
-export * from "./not-found";
+export * from "./layout";
