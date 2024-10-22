@@ -4,6 +4,8 @@ import { PostItem, PostSkeleton, useGetFeedPosts } from "@/features/posts";
 export const PostsFeed = () => {
 	const { data: posts, isPending, isError } = useGetFeedPosts();
 
+	console.log(posts); // Debug para ver si los datos se están obteniendo
+
 	return isPending ? (
 		<Stack gap={2}>
 			{new Array(3).fill(0).map((_, index) => (
