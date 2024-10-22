@@ -9,7 +9,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import LoginEmailSerializer, UserEmailSerializer, ProfileSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 
 CustomUser = get_user_model()
 
@@ -106,3 +107,24 @@ class FriendProfileViewSet(viewsets.ViewSet):
         user = get_object_or_404(CustomUser, pk=pk)
         serializer = self.serializer_class(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+# Vista para ver el perfil de otras cuentas autenticados
+class UsernameProfileViewSet(viewsets.ViewSet):
+    """Muestra el perfil de un amigo (otro usuario)."""
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden ver perfiles
+    http_method_names = ['get']
+    
+    @action(detail=False, methods=['get'], url_path='(?P<username>[^/.]+)')
+    def by_username(self, request, username=None):
+      try:
+        user = CustomUser.objects.get(username=username)
+      except CustomUser.DoesNotExist:
+        raise NotFound('Usuario no encontrado')
+      
+      serializer = self.serializer_class(user)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+      
