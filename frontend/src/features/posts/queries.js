@@ -10,22 +10,30 @@ export const postKeys = {
 	getOne: (id) => [...postKeys.key(), "get-one", id],
 };
 
-export const useGetFeedPosts = () => {
+export const useGetFeed = () => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
 		queryKey: postKeys.getAllFeed(),
 		queryFn: () => getAllFeed(accessToken),
+		select: (data) => {
+			data.results.sort((a, b) => b.id - a.id);
+			return data;
+		},
 		enabled: !!accessToken,
 	});
 };
 
-export const useGetUserPosts = () => {
+export const useGetPosts = () => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
 		queryKey: postKeys.getAllUser(),
 		queryFn: () => getAllUser(accessToken),
+		select: (data) => {
+			data.results.sort((a, b) => b.id - a.id);
+			return data;
+		},
 		enabled: !!accessToken,
 	});
 };
@@ -53,12 +61,18 @@ export const useCreatePost = () => {
 			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
 				if (!old) return [post];
 				// TODO: order by it's IDs
-				return [...old, post];
+				return {
+					...old,
+					results: old.results.concat(post),
+				};
 			});
 			queryClient.setQueryData(postKeys.getAllFeed(), (old) => {
 				if (!old) return [post];
 				// TODO: order by it's IDs
-				return [...old, post];
+				return {
+					...old,
+					results: old.results.concat(post),
+				};
 			});
 		},
 	});
@@ -74,11 +88,17 @@ export const useRemovePost = () => {
 		onSuccess: (_, id) => {
 			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
 				if (!old) return [];
-				return old.filter((post) => post.id !== id);
+				return {
+					...old,
+					results: old.results.filter((post) => post.id !== id),
+				};
 			});
 			queryClient.setQueryData(postKeys.getAllFeed(), (old) => {
 				if (!old) return [];
-				return old.filter((post) => post.id !== id);
+				return {
+					...old,
+					results: old.results.filter((post) => post.id !== id),
+				};
 			});
 		},
 	});

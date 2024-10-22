@@ -1,8 +1,8 @@
 import { Stack } from "react-bootstrap";
-import { PostItem, PostSkeleton, useGetUserPosts } from "@/features/posts";
+import { PostItem, PostSkeleton, useGetPosts } from "@/features/posts";
 
 export const PostList = () => {
-	const { data: posts, isPending, isError } = useGetUserPosts();
+	const { data, isPending, isError } = useGetPosts();
 
 	return isPending ? (
 		<Stack as="section" gap={3}>
@@ -12,11 +12,11 @@ export const PostList = () => {
 		</Stack>
 	) : isError ? (
 		<section>Error</section>
-	) : posts.length === 0 ? (
+	) : data.results.length === 0 ? (
 		<section>No posts yet.</section>
 	) : (
 		<Stack as="section" gap={3}>
-			{posts.map((post) => (
+			{data.results.map((post) => (
 				<PostItem key={post.id} post={post} />
 			))}
 			{/* TODO: when there are no more posts, display a message */}
