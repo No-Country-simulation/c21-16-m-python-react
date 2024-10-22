@@ -1,41 +1,47 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RedirectAuthenticated } from "./shared/components";
-import * as Home from "./routes";
+import { Layout } from "./routes/layout";
 import * as Login from "./routes/auth/login";
 import * as Register from "./routes/auth/register";
-import * as Profile from "./routes/[username]";
+import { Home } from "./components/homepage/home";
+import { Perfil } from "./components/perfil/perfil";
+import { PostCreate } from "./features/posts";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Home.Layout />,
+		element: <Layout />,
 		children: [
 			{
 				index: true,
-				element: <Home.Page />,
+				element: <Home />,
 			},
 			{
-				path: ":username",
-				element: <Profile.Page />,
+				path: "/auth/login",
+				element: (
+					<RedirectAuthenticated>
+						<Login.Page />
+					</RedirectAuthenticated>
+				),
+			},
+			{
+				path: "/auth/register",
+				element: (
+					<RedirectAuthenticated>
+						<Register.Page />
+					</RedirectAuthenticated>
+				),
+			},
+			{
+				path: "/perfil",
+				element: <Perfil />,
 			},
 		],
 	},
 	{
-		path: "/auth/login",
-		element: (
-			<RedirectAuthenticated>
-				<Login.Page />
-			</RedirectAuthenticated>
-		),
-	},
-	{
-		path: "/auth/register",
-		element: (
-			<RedirectAuthenticated>
-				<Register.Page />
-			</RedirectAuthenticated>
-		),
-	},
+		path:"/publicaciones",
+		element:<PostCreate/>
+	}
 ]);
 
 export const Routes = () => {
