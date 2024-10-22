@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
-# import environ
+from dotenv import load_dotenv
+import cloudinary
+
 from datetime import timedelta
 
 from pathlib import Path
@@ -45,8 +47,11 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
     'drf_spectacular_sidecar',
-    'corsheaders', 
-    'rest_framework_simplejwt.token_blacklist', #Garantiza que el refresh token anterior quede invalidado una vez que se rota, lo que evita que se usen tokens antiguos.
+    'drf_yasg',  # Documentation
+    'corsheaders',
+    # Garantiza que el refresh token anterior quede invalidado una vez que se rota, lo que evita que se usen tokens antiguos.
+    'rest_framework_simplejwt.token_blacklist',
+    'cloudinary',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -90,7 +95,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-
 # -------DB SQL-LITE------
 DATABASES = {
     'default': {
@@ -99,7 +103,7 @@ DATABASES = {
     }
 }
 
-#------DB SQL SERVER-------
+# ------DB SQL SERVER-------
 
 # DATABASES = {
 #     'default': {
@@ -110,14 +114,13 @@ DATABASES = {
 #         'HOST': '***',  # El nombre de tu servidor
 #         'PORT': '',  # El puerto por defecto de SQL Server
 #         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',  # Cambia el driver a la versión 
+#             'driver': 'ODBC Driver 17 for SQL Server',  # Cambia el driver a la versión
 #             'trusted_connection': 'yes',  # Autenticación de Windows
 #             'TrustServerCertificate': 'yes',  # Confía en el certificado del servidor
 #             'Encrypt': 'False',  # Desactiva la encriptación SSL
 #         },
 #     }
 # }
-
 
 
 # Password validation
@@ -156,9 +159,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -169,16 +169,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 # Configuración de Django Rest Framework para usar JWT
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  # Solo usuarios autenticados por defecto
+        # Solo usuarios autenticados por defecto
+        'rest_framework.permissions.IsAuthenticated',
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # Para la documentación automática
+    # Para la documentación automática
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 
@@ -187,10 +191,11 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,  # Rotación automática de tokens
     'BLACKLIST_AFTER_ROTATION': True,
-    'AUTH_HEADER_TYPES': ('Bearer',),  # Prefijo para el token en las cabeceras HTTP
+    # Prefijo para el token en las cabeceras HTTP
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-#Configuracion de 'drf_spectacular_sidecar' para la DOC
+# Configuracion de 'drf_spectacular_sidecar' para la DOC
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Documentación de mi API',
     'DESCRIPTION': 'Descripción breve de la API',
@@ -200,3 +205,19 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
     'REDOC_DIST': 'SIDECAR',
 }
+
+# Configuracion de cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+    secure=True
+)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

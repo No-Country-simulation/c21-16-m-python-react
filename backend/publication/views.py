@@ -16,7 +16,7 @@ class PublicationViewSet(viewsets.ModelViewSet):
     serializer_class = PublicationSerializer
 
     # Define qué publicaciones se van a mostrar, en este caso, todas las publicaciones en la base de datos.
-    queryset = Publication.objects.all()
+    queryset = Publication.objects.all().order_by('-publication_date')
 
     # Permite que cualquier persona (sin necesidad de iniciar sesión) pueda ver las publicaciones.
     permission_classes = [AllowAny]
@@ -36,12 +36,18 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        #files = Files.objects.filter(publication=id)
-        return Publication.objects.filter(id_user=user)
+        # files = Files.objects.filter(publication=id)
+        return Publication.objects.filter(id_user=user).order_by('-publication_date')
 
     def perform_create(self, serializer):
         files = self.request.FILES.getlist('files[]')
         serializer.save(id_user=self.request.user, files=files)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        message = {"message": "Publication deleted successfully"}
+        return Response(message, status=status.HTTP_204_NO_CONTENT)
 
 
 class FriendPublicationViewSet(viewsets.ModelViewSet):
@@ -63,7 +69,7 @@ class FriendPublicationViewSet(viewsets.ModelViewSet):
 
         # Si se ha proporcionado el ID del usuario, se muestran sus publicaciones.
         if id_user:
-            return Publication.objects.filter(id_user=id_user)
+            return Publication.objects.filter(id_user=id_user).order_by('-publication_date')
 
         # Si no se ha proporcionado un ID, no se devuelve ninguna publicación.
         return Publication.objects.none()
