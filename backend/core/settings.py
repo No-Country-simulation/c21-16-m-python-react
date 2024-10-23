@@ -3,6 +3,9 @@ import os
 from dotenv import load_dotenv
 import cloudinary
 
+load_dotenv()  # cargar el .env para poder usar las variables de entorno
+# IMPORTANTE: EL .env DEBE ESTAR EN LA RAIZ DEL PROYECTO RUTA "backend/core/.env"
+
 from datetime import timedelta
 
 from pathlib import Path

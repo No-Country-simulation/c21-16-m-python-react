@@ -49,8 +49,8 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
-        message = {"message": "Publication deleted successfully"}
-        return Response(message, status=status.HTTP_204_NO_CONTENT)
+        message = {"mensaje": "Publication deleted successfully"}
+        return Response(message, status=status.HTTP_200_OK)
 
 
 
