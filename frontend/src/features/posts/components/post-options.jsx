@@ -3,6 +3,7 @@ import { Button, Dropdown, Modal } from "react-bootstrap";
 import { toast } from "sonner";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useRemovePost } from "../queries";
+import { useGetProfile } from "@/features/auth";
 
 const MODALS = {
 	REMOVE: "remove",
@@ -10,6 +11,8 @@ const MODALS = {
 
 export const PostOptions = ({ post }) => {
 	const [modal, setModal] = useState("");
+
+	const user = useGetProfile();
 	const remove = useRemovePost();
 
 	const handleRemove = () => {
@@ -34,10 +37,11 @@ export const PostOptions = ({ post }) => {
 				</Dropdown.Toggle>
 
 				<Dropdown.Menu>
-					{/* #TODO: This should appear only if the user is the owner of the post */}
-					<Dropdown.Item as="button" onClick={() => setModal(MODALS.REMOVE)}>
-						Remove
-					</Dropdown.Item>
+					{user.isSuccess ? (
+						<Dropdown.Item as="button" onClick={() => setModal(MODALS.REMOVE)}>
+							Remove
+						</Dropdown.Item>
+					) : null}
 				</Dropdown.Menu>
 			</Dropdown>
 

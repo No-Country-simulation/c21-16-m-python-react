@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useAuth } from "../auth";
-import { create, getAllFeed, getAllUser, getOneUser, remove } from "./api";
+import { create, getFeed, getPosts, getOneUser, remove } from "./api";
 
 export const postKeys = {
 	key: () => ["posts"],
-	getAllFeed: () => [...postKeys.key(), "get-all-feed"],
-	getAllUser: () => [...postKeys.key(), "get-all-user"],
+	feed: () => [...postKeys.key(), "feed"],
+	byUsername: (username) => [...postKeys.key(), "by-username", username],
 	getOne: (id) => [...postKeys.key(), "get-one", id],
 };
 
@@ -14,8 +14,8 @@ export const useGetFeed = () => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
-		queryKey: postKeys.getAllFeed(),
-		queryFn: () => getAllFeed(accessToken),
+		queryKey: postKeys.feed(),
+		queryFn: () => getFeed(accessToken),
 		select: (data) => {
 			data.results.sort((a, b) => b.id - a.id);
 			return data;
@@ -24,12 +24,12 @@ export const useGetFeed = () => {
 	});
 };
 
-export const useGetPosts = () => {
+export const useGetPosts = (username) => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
-		queryKey: postKeys.getAllUser(),
-		queryFn: () => getAllUser(accessToken),
+		queryKey: postKeys.byUsername(),
+		queryFn: () => getPosts(accessToken, username),
 		select: (data) => {
 			data.results.sort((a, b) => b.id - a.id);
 			return data;
@@ -66,7 +66,7 @@ export const useCreatePost = () => {
 					results: old.results.concat(post),
 				};
 			});
-			queryClient.setQueryData(postKeys.getAllFeed(), (old) => {
+			queryClient.setQueryData(postKeys.feed(), (old) => {
 				if (!old) return [post];
 				// TODO: order by it's IDs
 				return {
@@ -93,7 +93,7 @@ export const useRemovePost = () => {
 					results: old.results.filter((post) => post.id !== id),
 				};
 			});
-			queryClient.setQueryData(postKeys.getAllFeed(), (old) => {
+			queryClient.setQueryData(postKeys.feed(), (old) => {
 				if (!old) return [];
 				return {
 					...old,
