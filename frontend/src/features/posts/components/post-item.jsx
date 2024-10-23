@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, Col, Row } from "react-bootstrap";
 import { PostGallery } from "./post-gallery";
 import { PostOptions } from "./post-options";
+import { PostUserProfile } from "./post-user-profile";
 
 export const PostItem = ({ post }) => {
 	const navigate = useNavigate();
@@ -16,23 +17,11 @@ export const PostItem = ({ post }) => {
 
 	return (
 		<Card key={post.id}>
-			{/* <CardHeader className="d-flex gap-2 align-items-center">
-				<Image
-					src="https://avatars.githubusercontent.com/u/55491792?v=4&size=64"
-					roundedCircle
-					style={{
-						width: "36px",
-						height: "36px",
-					}}
-				/>
-				<div className="d-flex flex-column lh-sm">
-					<strong>Carlos Ayala</strong>
-					<p className="text-secondary mb-0 lh-1">@Legger</p>
-				</div>
-			</CardHeader> */}
 			<CardHeader>
 				<Row>
-					<Col xs={10}>#TODO: Header - User</Col>
+					<Col xs={10}>
+						<PostUserProfile post={post} />
+					</Col>
 					<Col xs={2} className="text-end">
 						<PostOptions post={post} />
 					</Col>

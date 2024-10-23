@@ -1,27 +1,35 @@
+import { useParams } from "react-router-dom";
 import { Stack } from "react-bootstrap";
-import { PostItem, PostSkeleton, useGetUserPosts } from "@/features/posts";
+import { PostItem, PostSkeleton, useGetPosts } from "@/features/posts";
+import { HTTP_STATUS } from "@/shared/utils";
 
 export const PostList = () => {
-	const { data: posts, isPending, isError } = useGetUserPosts();
+	const { username } = useParams();
+
+	const { data, isPending, isError, error } = useGetPosts(username);
 
 	return isPending ? (
-		<Stack as="section" gap={3}>
+		<Stack gap={3}>
 			{new Array(3).fill(0).map((_, index) => (
 				<PostSkeleton key={index} />
 			))}
 		</Stack>
 	) : isError ? (
-		<section>Error</section>
-	) : posts.length === 0 ? (
-		<section>No posts yet.</section>
+		<div className="py-5 text-center text-secondary">
+			<p className="m-0">{error.status === HTTP_STATUS.NOT_FOUND ? "No posts found." : "Something went wrong."}</p>
+		</div>
+	) : data.length === 0 ? (
+		<div className="py-5 text-center text-secondary">
+			<p className="m-0">No posts yet.</p>
+		</div>
 	) : (
-		<Stack as="section" gap={3}>
-			{posts.map((post) => (
+		<Stack gap={3}>
+			{data.map((post) => (
 				<PostItem key={post.id} post={post} />
 			))}
 			{/* TODO: when there are no more posts, display a message */}
 			<div className="py-5 text-center text-secondary">
-				<p>You are up to date.</p>
+				<p className="m-0">You are up to date.</p>
 			</div>
 		</Stack>
 	);

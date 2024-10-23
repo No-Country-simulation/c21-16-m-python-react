@@ -1,14 +1,15 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RegisterEmailViewSet, LoginEmailViewSet, ProfileViewSet, FriendProfileViewSet
+from .views import RegisterEmailViewSet, LoginEmailViewSet, ProfileViewSet, FriendProfileViewSet, UsernameProfileViewSet
 
 router = DefaultRouter()
 router.register(r'register', RegisterEmailViewSet, basename='register')
 router.register(r'login', LoginEmailViewSet, basename='login')
-router.register(r'friend-profile', FriendProfileViewSet, basename='friend-profile')
+router.register(r'', FriendProfileViewSet, basename='by-id')
+router.register(r'by-username', UsernameProfileViewSet, basename='by-username')
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('profile/', ProfileViewSet.as_view(
-        {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='profile')
+        {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='profile'),
+    path('', include(router.urls))
 ]
