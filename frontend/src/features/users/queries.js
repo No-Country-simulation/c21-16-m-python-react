@@ -29,5 +29,6 @@ export const useGetUserByUsername = (username) => {
 
 			return user?.username === username ? user : undefined;
 		},
+		enabled: !!accessToken,
 	});
 };

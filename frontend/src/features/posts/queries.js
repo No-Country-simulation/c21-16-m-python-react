@@ -28,12 +28,8 @@ export const useGetPosts = (username) => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
-		queryKey: postKeys.byUsername(),
+		queryKey: postKeys.byUsername(username),
 		queryFn: () => getPosts(accessToken, username),
-		select: (data) => {
-			data.results.sort((a, b) => b.id - a.id);
-			return data;
-		},
 		enabled: !!accessToken,
 	});
 };
@@ -58,17 +54,27 @@ export const useCreatePost = () => {
 	return useMutation({
 		mutationFn: (values) => create(accessToken, values),
 		onSuccess: (post) => {
-			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
-				if (!old) return [post];
-				// TODO: order by it's IDs
+			queryClient.setQueryData(postKeys.byUsername(), (old) => {
+				if (!old)
+					return {
+						count: 1,
+						next: null,
+						previous: null,
+						results: [post],
+					};
 				return {
 					...old,
 					results: old.results.concat(post),
 				};
 			});
 			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old) return [post];
-				// TODO: order by it's IDs
+				if (!old)
+					return {
+						count: 1,
+						next: null,
+						previous: null,
+						results: [post],
+					};
 				return {
 					...old,
 					results: old.results.concat(post),
@@ -86,15 +92,27 @@ export const useRemovePost = () => {
 	return useMutation({
 		mutationFn: (id) => remove(accessToken, id),
 		onSuccess: (_, id) => {
-			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
-				if (!old) return [];
+			queryClient.setQueryData(postKeys.byUsername(), (old) => {
+				if (!old)
+					return {
+						count: 0,
+						next: null,
+						previous: null,
+						results: [],
+					};
 				return {
 					...old,
 					results: old.results.filter((post) => post.id !== id),
 				};
 			});
 			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old) return [];
+				if (!old)
+					return {
+						count: 0,
+						next: null,
+						previous: null,
+						results: [],
+					};
 				return {
 					...old,
 					results: old.results.filter((post) => post.id !== id),

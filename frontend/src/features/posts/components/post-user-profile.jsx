@@ -41,15 +41,19 @@ export const PostUserProfile = ({ post }) => {
 				/>
 			) : (
 				<div
-					className="bg-secondary rounded-circle"
 					style={{
 						width: "36px",
 						height: "36px",
 					}}
-				/>
+					className="bg-secondary rounded-circle d-flex justify-content-center align-items-center"
+				>
+					<span className="text-white fs-6 fw-bold">
+						{[author.first_name, author.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
+					</span>
+				</div>
 			)}
 			<Stack>
-				<strong className="lh-1 link-underline-opacity-0">{author.username}</strong>
+				<strong className="lh-1 link-underline-opacity-0">{`${author.first_name} ${author.last_name}`}</strong>
 				<p className="text-secondary m-0 link-underline-opacity-0">@{author.username}</p>
 			</Stack>
 		</Stack>

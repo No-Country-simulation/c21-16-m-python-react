@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getNewTokens, getProfile, login, register } from "./api";
+import { getNewTokens, getProfile, login, register, updateProfile } from "./api";
 import { REFRESH_TOKEN_KEY, TOKENS_INITIAL_VALUES } from "./constants";
+import { userKeys } from "../users";
 
 export const authKeys = {
 	key: () => ["auth"],
@@ -96,6 +97,25 @@ export const useSignout = () => {
 		onSuccess() {
 			localStorage.removeItem(REFRESH_TOKEN_KEY);
 			queryClient.setQueryData(authKeys.tokens(), TOKENS_INITIAL_VALUES);
+		},
+	});
+};
+
+export const useUpdateProfile = () => {
+	const queryClient = useQueryClient();
+	const { accessToken } = useAuth();
+
+	return useMutation({
+		mutationFn: (values) => updateProfile(accessToken, values),
+		onSuccess(response) {
+			queryClient.setQueryData(authKeys.profile(), (oldData) => ({
+				...oldData,
+				...response,
+			}));
+			queryClient.setQueriesData(userKeys.getByUsername(response.username), (oldData) => ({
+				...oldData,
+				...response,
+			}));
 		},
 	});
 };
