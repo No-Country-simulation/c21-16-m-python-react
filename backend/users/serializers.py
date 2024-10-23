@@ -85,7 +85,6 @@ class LoginEmailSerializer(serializers.Serializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='get_role', read_only=True)
-    # images = serializers.FileField(required=False)
     images = serializers.SerializerMethodField()
 
     class Meta:
