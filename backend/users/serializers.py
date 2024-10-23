@@ -85,7 +85,8 @@ class LoginEmailSerializer(serializers.Serializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='get_role', read_only=True)
-    images = serializers.FileField(required=False)
+    # images = serializers.FileField(required=False)
+    images = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
@@ -111,3 +112,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    def get_images(self, obj):
+        if obj.images:
+            return obj.images
+        return None
