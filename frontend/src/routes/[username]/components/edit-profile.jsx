@@ -19,7 +19,7 @@ export const EditProfile = ({ show, onHide }) => {
 			first_name: data.first_name,
 			last_name: data.last_name,
 			email: data.email,
-			images: data.images,
+			images: data.images ?? "",
 		},
 		validationSchema: editProfileSchema,
 		onSubmit: (values) => {
