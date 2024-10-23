@@ -1,9 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
+import { useAuth } from "@/features/auth";
 
 export const Layout = () => {
+	const { isAuthenticated, isLoading } = useAuth();
 	return (
 		<>
+			{
+				isAuthenticated ? (
 			<Container className="h-100">
 				<Row className="h-100">
 					<Col xs={3} className="border-end">
@@ -17,6 +21,11 @@ export const Layout = () => {
 					</Col>
 				</Row>
 			</Container>
+				) : (
+					"no autenticado"
+				)
+			}
+			
 		</>
 	);
 };
