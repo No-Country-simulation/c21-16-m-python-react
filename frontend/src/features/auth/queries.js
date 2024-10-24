@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { userKeys } from "../users";
 import { getNewTokens, getProfile, login, register, updateProfile } from "./api";
 import { REFRESH_TOKEN_KEY, TOKENS_INITIAL_VALUES } from "./constants";
-import { userKeys } from "../users";
 
 export const authKeys = {
 	key: () => ["auth"],
@@ -89,12 +89,11 @@ export const useSignout = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		// mutationFn: signout,
 		mutationFn: () => Promise.resolve(),
 		onSuccess() {
 			localStorage.removeItem(REFRESH_TOKEN_KEY);
 			queryClient.setQueryData(authKeys.tokens(), TOKENS_INITIAL_VALUES);
-			queryClient.setQueryData(auth.profile(), null);
+			queryClient.setQueryData(authKeys.profile(), null);
 		},
 	});
 };
@@ -106,14 +105,8 @@ export const useUpdateProfile = () => {
 	return useMutation({
 		mutationFn: (values) => updateProfile(accessToken, values),
 		onSuccess(response) {
-			queryClient.setQueryData(authKeys.profile(), (oldData) => ({
-				...oldData,
-				...response,
-			}));
-			queryClient.setQueryData(userKeys.getByUsername(response.username), (oldData) => ({
-				...oldData,
-				...response,
-			}));
+			queryClient.setQueryData(authKeys.profile(), response);
+			queryClient.setQueryData(userKeys.getByUsername(response.username), response);
 		},
 	});
 };

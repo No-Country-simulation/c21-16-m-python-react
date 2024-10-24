@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { useAuth } from "../auth";
+import { authKeys, useAuth } from "../auth";
 import { create, getFeed, getPosts, getOneUser, remove } from "./api";
 
 export const postKeys = {
@@ -54,7 +54,15 @@ export const useCreatePost = () => {
 	return useMutation({
 		mutationFn: (values) => create(accessToken, values),
 		onSuccess: (post) => {
-			queryClient.setQueryData(postKeys.byUsername(), (old) => {
+			const profile = queryClient.getQueryData(authKeys.profile());
+
+			queryClient.setQueryData(postKeys.byUsername(profile.username), (old) => {
+				if (!old) {
+					return [post];
+				}
+				return [post, ...old];
+			});
+			queryClient.setQueryData(postKeys.feed(), (old) => {
 				if (!old)
 					return {
 						count: 1,
@@ -64,12 +72,8 @@ export const useCreatePost = () => {
 					};
 				return {
 					...old,
-					results: old.results.concat(post),
+					results: [post, ...old.results],
 				};
-			});
-			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old) return [post];
-				return [post, ...old];
 			});
 		},
 	});
@@ -83,7 +87,13 @@ export const useRemovePost = () => {
 	return useMutation({
 		mutationFn: (id) => remove(accessToken, id),
 		onSuccess: (_, id) => {
-			queryClient.setQueryData(postKeys.byUsername(), (old) => {
+			const profile = queryClient.getQueryData(authKeys.profile());
+
+			queryClient.setQueryData(postKeys.byUsername(profile.username), (old) => {
+				if (!old) return [];
+				return old.filter((p) => p.id !== id);
+			});
+			queryClient.setQueryData(postKeys.feed(), (old) => {
 				if (!old)
 					return {
 						count: 0,
@@ -95,10 +105,6 @@ export const useRemovePost = () => {
 					...old,
 					results: old.results.filter((post) => post.id !== id),
 				};
-			});
-			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old) return [];
-				return old.filter((post) => post.id !== id);
 			});
 		},
 	});

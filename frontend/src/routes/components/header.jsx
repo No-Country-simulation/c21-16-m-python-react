@@ -1,7 +1,7 @@
-import { useAuth, useGetProfile, useSignout } from "@/features/auth";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { Button, Container, Dropdown, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Button, Container, Dropdown, Image, Navbar } from "react-bootstrap";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useAuth, useGetProfile, useSignout } from "@/features/auth";
 
 export const Header = () => {
 	const { isAuthenticated, isPending } = useAuth();
@@ -13,7 +13,7 @@ export const Header = () => {
 	};
 
 	return (
-		<Navbar expand="lg" className="bg-body-tertiary">
+		<Navbar expand="lg" className="bg-body-tertiary border-bottom">
 			<Container as="header">
 				<Navbar.Brand as={Link}>PostPlate</Navbar.Brand>
 				{isPending ? (
@@ -23,13 +23,11 @@ export const Header = () => {
 						<Navbar.Toggle />
 						<Navbar.Collapse className="justify-content-end">
 							<Dropdown>
-								<Dropdown.Toggle style={{ width: "36px", height: "36px" }} className="rounded-circle">
+								<Dropdown.Toggle className="d-flex d-flex justify-content-center align-items-center">
 									{profile.isPending ? (
 										<p className="m-0">...</p>
 									) : profile.isError ? (
-										<div className="w-100 h-100 d-flex justify-content-center align-items-center">
-											<ExclamationTriangleIcon style={{ width: "32px", height: "32px" }} className="text-white" />
-										</div>
+										<ExclamationTriangleIcon style={{ width: "20px", height: "20px" }} className="text-white" />
 									) : profile.data.images ? (
 										<Image src={profile.data.images} roundedCircle fluid className="object-fit-contain border" />
 									) : (
@@ -44,6 +42,13 @@ export const Header = () => {
 								</Dropdown.Toggle>
 
 								<Dropdown.Menu>
+									<Dropdown.ItemText as="div">
+										<p className="lh-1 m-0 fw-bold">
+											{profile.data?.first_name} {profile.data?.last_name}
+										</p>
+										<small className="lh-1 text-muted">@{profile.data?.username}</small>
+									</Dropdown.ItemText>
+									<Dropdown.Divider />
 									<Dropdown.Item as={Link} to={"/" + profile.data?.username}>
 										Perfil
 									</Dropdown.Item>

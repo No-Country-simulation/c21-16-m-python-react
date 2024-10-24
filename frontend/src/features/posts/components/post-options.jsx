@@ -21,6 +21,9 @@ export const PostOptions = ({ post }) => {
 				setModal("");
 				toast.success("Post removed successfully");
 			},
+			onError(error) {
+				toast.error(error.message);
+			},
 		});
 	};
 

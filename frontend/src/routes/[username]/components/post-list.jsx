@@ -7,7 +7,7 @@ export const PostList = () => {
 	const { username } = useParams();
 
 	const { data, isPending, isError, error } = useGetPosts(username);
-	console.log(data);
+
 	return isPending ? (
 		<Stack gap={3}>
 			{new Array(3).fill(0).map((_, index) => (

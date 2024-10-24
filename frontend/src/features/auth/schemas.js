@@ -19,7 +19,8 @@ const images = mixed()
 
 		return file.size <= MAX_SIZE;
 	})
-	.default("");
+	.nullable()
+	.default(null);
 
 export const signinSchema = object({
 	email,

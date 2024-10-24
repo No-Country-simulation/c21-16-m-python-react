@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Form, Image, Modal, Ratio, Row } from "react-bootstrap";
 import { toast } from "sonner";
 import { editProfileSchema, useGetProfile, useUpdateProfile } from "@/features/auth";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 export const EditProfile = ({ show, onHide }) => {
 	const { username } = useParams();
@@ -19,11 +20,10 @@ export const EditProfile = ({ show, onHide }) => {
 			first_name: data.first_name,
 			last_name: data.last_name,
 			email: data.email,
-			images: data.images ?? "",
+			images: data.images,
 		},
 		validationSchema: editProfileSchema,
 		onSubmit: (values) => {
-   if(!values.images) delete values.images;
 			const formData = new FormData();
 			Object.entries(values).forEach(([key, value]) => {
 				formData.append(key, value);
@@ -38,6 +38,7 @@ export const EditProfile = ({ show, onHide }) => {
 				},
 			});
 		},
+		enableReinitialize: true,
 	});
 
 	useEffect(() => {
@@ -110,6 +111,18 @@ export const EditProfile = ({ show, onHide }) => {
 								/>
 								<Form.Control.Feedback type="invalid">{formik.errors.images}</Form.Control.Feedback>
 							</Form.Group>
+							<div className="text-center">
+								{formik.values.images ? (
+									<Button variant="danger" onClick={() => formik.setFieldValue("images", null)}>
+										<TrashIcon
+											style={{
+												width: "1.5em",
+												height: "1.5em",
+											}}
+										/>
+									</Button>
+								) : null}
+							</div>
 						</Col>
 					</Row>
 					<Row>

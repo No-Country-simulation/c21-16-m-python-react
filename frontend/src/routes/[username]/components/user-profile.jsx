@@ -68,7 +68,7 @@ export const UserProfile = () => {
 						</div>
 					)}
 				</Ratio>
-				<Row className="mt-1">
+				<Row>
 					<Col>
 						<h2 className="mb-0">
 							{account.first_name} {account.last_name}
