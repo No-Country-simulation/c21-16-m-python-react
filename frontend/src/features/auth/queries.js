@@ -13,19 +13,16 @@ export const authKeys = {
 export const useAuth = () => {
 	const queryClient = useQueryClient();
 
-	const {
-		data: { refresh, access },
-		isLoading,
-		isError,
-	} = useQuery({
+	const { data, isPending, isError } = useQuery({
 		queryKey: authKeys.tokens(),
 		queryFn: () => {
 			const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
 			return refreshToken ? getNewTokens(refreshToken) : TOKENS_INITIAL_VALUES;
 		},
-		initialData: TOKENS_INITIAL_VALUES,
+
 		refetchInterval: 1000 * 60 * 30, // 30 minutes
 	});
+	const { refresh, access } = data ?? TOKENS_INITIAL_VALUES;
 
 	const onSignin = ({ refresh, access }) => {
 		localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
@@ -55,7 +52,7 @@ export const useAuth = () => {
 		isAuthenticated,
 		onSignin,
 		onSignout,
-		isLoading,
+		isPending,
 		isError,
 	};
 };
@@ -97,6 +94,7 @@ export const useSignout = () => {
 		onSuccess() {
 			localStorage.removeItem(REFRESH_TOKEN_KEY);
 			queryClient.setQueryData(authKeys.tokens(), TOKENS_INITIAL_VALUES);
+			queryClient.setQueryData(auth.profile(), null);
 		},
 	});
 };
@@ -112,7 +110,7 @@ export const useUpdateProfile = () => {
 				...oldData,
 				...response,
 			}));
-			queryClient.setQueriesData(userKeys.getByUsername(response.username), (oldData) => ({
+			queryClient.setQueryData(userKeys.getByUsername(response.username), (oldData) => ({
 				...oldData,
 				...response,
 			}));

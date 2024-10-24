@@ -68,17 +68,8 @@ export const useCreatePost = () => {
 				};
 			});
 			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old)
-					return {
-						count: 1,
-						next: null,
-						previous: null,
-						results: [post],
-					};
-				return {
-					...old,
-					results: old.results.concat(post),
-				};
+				if (!old) return [post];
+				return [post, ...old];
 			});
 		},
 	});
@@ -106,17 +97,8 @@ export const useRemovePost = () => {
 				};
 			});
 			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old)
-					return {
-						count: 0,
-						next: null,
-						previous: null,
-						results: [],
-					};
-				return {
-					...old,
-					results: old.results.filter((post) => post.id !== id),
-				};
+				if (!old) return [];
+				return old.filter((post) => post.id !== id);
 			});
 		},
 	});
