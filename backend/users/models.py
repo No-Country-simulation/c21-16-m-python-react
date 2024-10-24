@@ -3,10 +3,13 @@ from django.utils.translation import gettext_lazy as _
 from roles.models import Role
 from django.db import models
 import uuid
+import cloudinary
+import cloudinary.uploader
+import cloudinary.models
 
 
-def blog_thumbnail_directory(instance, filename):
-    return 'profile/{0}/{1}'.format(instance.name, filename)
+def blog_thumbnail_directory(instance, filename=None):
+    return f'blog_thumbnails/{instance.id}/{filename}'
 
 
 class CustomUserManager(BaseUserManager):
@@ -38,8 +41,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('username'), max_length=150, unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
-    images = models.ImageField(upload_to=blog_thumbnail_directory,
-                               max_length=500, blank=True, null=True, help_text="profile photo")
+    images = models.URLField(max_length=500, blank=True, null=True)
+    image_public_id = models.CharField(max_length=100, blank=True, null=True)
 
     verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(
@@ -71,9 +74,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_thumbnail(self):
-        if self.images:
-            return self.images.url
-        return ''
+        """
+        Retorna la URL de la imagen de perfil del usuario.
+        """
+        return self.images if self.images else ''
 
     def get_role(self):
         """

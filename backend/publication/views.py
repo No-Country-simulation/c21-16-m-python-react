@@ -6,6 +6,9 @@ from django.shortcuts import get_object_or_404
 from .serializers import PublicationSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
+
 
 CustomUser = get_user_model()
 
@@ -16,7 +19,7 @@ class PublicationViewSet(viewsets.ModelViewSet):
     serializer_class = PublicationSerializer
 
     # Define qué publicaciones se van a mostrar, en este caso, todas las publicaciones en la base de datos.
-    queryset = Publication.objects.all()
+    queryset = Publication.objects.all().order_by('-publication_date')
 
     # Permite que cualquier persona (sin necesidad de iniciar sesión) pueda ver las publicaciones.
     permission_classes = [AllowAny]
@@ -36,34 +39,46 @@ class UserPublicationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        #files = Files.objects.filter(publication=id)
-        return Publication.objects.filter(id_user=user)
+        # files = Files.objects.filter(publication=id)
+        return Publication.objects.filter(id_user=user).order_by('-publication_date')
 
     def perform_create(self, serializer):
         files = self.request.FILES.getlist('files[]')
         serializer.save(id_user=self.request.user, files=files)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        message = {"mensaje": "Publication deleted successfully"}
+        return Response(message, status=status.HTTP_200_OK)
 
-class FriendPublicationViewSet(viewsets.ModelViewSet):
-    """Muestra las publicaciones de otros usuarios (por ejemplo, cuando se visita el perfil de un amigo) puede eliminarse si no se usan publicaciones privadas dentro de la pagina."""
 
-    # Usa el mismo serializer para las publicaciones.
+
+
+# Muestra el perfil de un usuario
+class ProfilePublicationViewSet(viewsets.ModelViewSet):
+    """Muestra todas las publicaciones de un usuario"""
+    # Usa el serializer "PublicationSerializer" para convertir las publicaciones a formato JSON.
     serializer_class = PublicationSerializer
 
-    # Solo permite que los usuarios autenticados puedan ver las publicaciones de otros usuarios.
+    # Define qué publicaciones se van a mostrar, en este caso, todas las publicaciones en la base de datos.
+    queryset = Publication.objects.all().order_by('-publication_date')
+
+    # Pide sesión iniciada para mostrar el perfil
     permission_classes = [IsAuthenticated]
 
-    # Solo permite el método "GET", para obtener/leer publicaciones (no se pueden modificar).
+
+    # Solo permite el método "GET", que es el que se usa para obtener/leer datos (no se puede crear ni modificar desde aquí).
     http_method_names = ['get']
-
-    # Define que se van a mostrar las publicaciones de un usuario específico (como el perfil de un amigo).
-    def get_queryset(self):
-        # Obtiene el ID del usuario cuyas publicaciones se quieren ver desde los parámetros de la URL.
-        id_user = self.request.query_params.get('user_id')
-
-        # Si se ha proporcionado el ID del usuario, se muestran sus publicaciones.
-        if id_user:
-            return Publication.objects.filter(id_user=id_user)
-
-        # Si no se ha proporcionado un ID, no se devuelve ninguna publicación.
-        return Publication.objects.none()
+    
+    @action(detail=False, methods=['get'], url_path='user/(?P<username>[^/.]+)')
+    def by_username(self, request, username=None):
+      try:
+        user = CustomUser.objects.get(username=username)
+      except CustomUser.DoesNotExist:
+        raise NotFound('Usuario no encontrado')
+      
+      publications = Publication.objects.filter(id_user=user).order_by('-publication_date')
+      serializer = self.get_serializer(publications, many=True)
+      return Response(serializer.data)
+      

@@ -49,3 +49,13 @@ export const getNewTokens = (refreshToken) => {
 		body: JSON.stringify({ refresh: refreshToken }),
 	});
 };
+
+export const updateProfile = (accessToken, values) => {
+	return fetcher(`${BASE_API_URL}/api/auth/profile/`, {
+		method: "PUT",
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+		body: values,
+	});
+};
