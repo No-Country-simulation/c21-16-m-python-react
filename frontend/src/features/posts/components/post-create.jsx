@@ -27,6 +27,9 @@ export const PostCreate = () => {
 					formik.resetForm();
 					toast.success("Post created successfully");
 				},
+				onError(error) {
+					toast.error(error.message);
+				},
 			});
 		},
 		validateOnBlur: false,

@@ -9,7 +9,7 @@ router.register(r'', FriendProfileViewSet, basename='by-id')
 router.register(r'by-username', UsernameProfileViewSet, basename='by-username')
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('profile/', ProfileViewSet.as_view(
-        {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='profile')
+        {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='profile'),
+    path('', include(router.urls))
 ]

@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { useAuth } from "../auth";
-import { create, getAllFeed, getAllUser, getOneUser, remove } from "./api";
+import { authKeys, useAuth } from "../auth";
+import { create, getFeed, getPosts, getOneUser, remove } from "./api";
 
 export const postKeys = {
 	key: () => ["posts"],
-	getAllFeed: () => [...postKeys.key(), "get-all-feed"],
-	getAllUser: () => [...postKeys.key(), "get-all-user"],
+	feed: () => [...postKeys.key(), "feed"],
+	byUsername: (username) => [...postKeys.key(), "by-username", username],
 	getOne: (id) => [...postKeys.key(), "get-one", id],
 };
 
@@ -14,8 +14,8 @@ export const useGetFeed = () => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
-		queryKey: postKeys.getAllFeed(),
-		queryFn: () => getAllFeed(accessToken),
+		queryKey: postKeys.feed(),
+		queryFn: () => getFeed(accessToken),
 		select: (data) => {
 			data.results.sort((a, b) => b.id - a.id);
 			return data;
@@ -24,16 +24,12 @@ export const useGetFeed = () => {
 	});
 };
 
-export const useGetPosts = () => {
+export const useGetPosts = (username) => {
 	const { accessToken } = useAuth();
 
 	return useQuery({
-		queryKey: postKeys.getAllUser(),
-		queryFn: () => getAllUser(accessToken),
-		select: (data) => {
-			data.results.sort((a, b) => b.id - a.id);
-			return data;
-		},
+		queryKey: postKeys.byUsername(username),
+		queryFn: () => getPosts(accessToken, username),
 		enabled: !!accessToken,
 	});
 };
@@ -58,20 +54,25 @@ export const useCreatePost = () => {
 	return useMutation({
 		mutationFn: (values) => create(accessToken, values),
 		onSuccess: (post) => {
-			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
-				if (!old) return [post];
-				// TODO: order by it's IDs
-				return {
-					...old,
-					results: old.results.concat(post),
-				};
+			const profile = queryClient.getQueryData(authKeys.profile());
+
+			queryClient.setQueryData(postKeys.byUsername(profile.username), (old) => {
+				if (!old) {
+					return [post];
+				}
+				return [post, ...old];
 			});
-			queryClient.setQueryData(postKeys.getAllFeed(), (old) => {
-				if (!old) return [post];
-				// TODO: order by it's IDs
+			queryClient.setQueryData(postKeys.feed(), (old) => {
+				if (!old)
+					return {
+						count: 1,
+						next: null,
+						previous: null,
+						results: [post],
+					};
 				return {
 					...old,
-					results: old.results.concat(post),
+					results: [post, ...old.results],
 				};
 			});
 		},
@@ -86,15 +87,20 @@ export const useRemovePost = () => {
 	return useMutation({
 		mutationFn: (id) => remove(accessToken, id),
 		onSuccess: (_, id) => {
-			queryClient.setQueryData(postKeys.getAllUser(), (old) => {
+			const profile = queryClient.getQueryData(authKeys.profile());
+
+			queryClient.setQueryData(postKeys.byUsername(profile.username), (old) => {
 				if (!old) return [];
-				return {
-					...old,
-					results: old.results.filter((post) => post.id !== id),
-				};
+				return old.filter((p) => p.id !== id);
 			});
-			queryClient.setQueryData(postKeys.getAllFeed(), (old) => {
-				if (!old) return [];
+			queryClient.setQueryData(postKeys.feed(), (old) => {
+				if (!old)
+					return {
+						count: 0,
+						next: null,
+						previous: null,
+						results: [],
+					};
 				return {
 					...old,
 					results: old.results.filter((post) => post.id !== id),

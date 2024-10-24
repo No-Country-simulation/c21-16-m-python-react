@@ -2,7 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { signupInitialValues, signupSchema, useRegister } from "@/features/auth";
-
+import '../Auth.css'
+import platoG from "../../../multimedia/generales/platogrande-landing.png";
+import platoC from "../../../multimedia/generales/platochico-landing.png";
 export const Page = () => {
 	const navigate = useNavigate();
 	const { mutate, isPending } = useRegister();
@@ -20,19 +22,29 @@ export const Page = () => {
 	});
 
 	return (
-		<Container>
-			<Row>
-				<Col>
+		<Container
+			className="d-flex justify-content-center align-items-center container-auth"
+			style={{ minHeight: "92vh", minWidth: "100vw" }}
+		>
+			<img src={platoG} className="platoG-registro " />
+			<img src={platoC} className="platoC-registro" />
+			<Row className="w-100">
+				<Col
+					md={6}
+					lg={6}
+					className="mx-auto"
+					style={{ borderRadius: "10px", padding: "5vh", backgroundColor: "#F8F9FA", zIndex: "5000" }}
+				>
 					<div className="mb-4">
-						<h1>Register</h1>
-						<p>Enter your information to create an account.</p>
+						<h1>Registro</h1>
+						<p className="parrafo-auth">Ingresa tu información para crear una cuenta.</p>
 					</div>
 
 					<Form onSubmit={formik.handleSubmit} noValidate className="d-grid gap-2">
 						<Row>
 							<Col>
 								<Form.Group controlId="username">
-									<Form.Label>Username</Form.Label>
+									<Form.Label>Usuario</Form.Label>
 									<Form.Control
 										{...formik.getFieldProps("username")}
 										isInvalid={formik.touched.username && formik.errors.username}
@@ -44,7 +56,7 @@ export const Page = () => {
 						<Row>
 							<Col>
 								<Form.Group controlId="first_name">
-									<Form.Label>First Name</Form.Label>
+									<Form.Label>Nombre</Form.Label>
 									<Form.Control
 										{...formik.getFieldProps("first_name")}
 										isInvalid={formik.touched.first_name && formik.errors.first_name}
@@ -54,7 +66,7 @@ export const Page = () => {
 							</Col>
 							<Col>
 								<Form.Group controlId="last_name">
-									<Form.Label>Last Name</Form.Label>
+									<Form.Label>Apellido</Form.Label>
 									<Form.Control
 										{...formik.getFieldProps("last_name")}
 										isInvalid={formik.touched.last_name && formik.errors.last_name}
@@ -76,12 +88,9 @@ export const Page = () => {
 									<Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
 								</Form.Group>
 							</Col>
-						</Row>
-
-						<Row>
 							<Col>
 								<Form.Group controlId="password">
-									<Form.Label>Password</Form.Label>
+									<Form.Label>Contraseña</Form.Label>
 									<Form.Control
 										{...formik.getFieldProps("password")}
 										type="password"
@@ -95,7 +104,7 @@ export const Page = () => {
 						<Row>
 							<Col>
 								<Form.Group controlId="password2">
-									<Form.Label>Confirm Password</Form.Label>
+									<Form.Label>Confirmar contraseña</Form.Label>
 									<Form.Control
 										{...formik.getFieldProps("password2")}
 										type="password"
@@ -109,14 +118,14 @@ export const Page = () => {
 
 						<div className="d-grid mt-2">
 							<Button type="submit" size="lg" disabled={isPending}>
-								Register
+								Registrate
 							</Button>
 						</div>
 					</Form>
 
 					<div className="mt-2">
 						<p>
-							Already have an account? <Link to="/auth/login">Login</Link>
+						¿Ya tienes una cuenta? <Link to="/auth/login">Ingresa</Link>
 						</p>
 					</div>
 				</Col>
