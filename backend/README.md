@@ -1,36 +1,33 @@
-# c21-16-m-python-react
-c21-16-m-python-react
+* --------------------------------------------- PASO A PASOS ---------------------------------- 
 
-# Backend
+1: Activar el entorno virtual
 
-## Pasos para levantar el servidor:
+# En Windows
+env\Scripts\activate.bat
 
-1. Crear el entorno virtual:
-```bash
-python -m venv venv
-```
-2. Abrir el entorno virtual desde vs code con la extension de python:
+# En macOS/Linux
+source env/bin/activate
+_______________________________________________________________________________
 
-   - Crt + Shift + P
+2: instalar dependencias:
+pip install -r requirements.txt
+_______________________________________________________________________________
+3:Crear migraciones
+python manage.py makemigrations
 
-   - Escoger la opcion de vs code: ">Python: Seleccionar interprete"
+ACLARACIÓN: en el caso de correr el comando del paso 3 y que de como resultado lo siguiente
+No changes detected
 
-3. Instalar las dependencias del proyecto desde la consola:
+tenemos que escribir el comando mas el nombre de la app ej = "python manage.py makemigrations users "  "python manage.py makemigrations publication" 
+_______________________________________________________________________________
 
-```bash
-pip instal -r requirements.txt
-```
-
-4. Iniciar el servidor:
-```bash
-python manage.py runserver
-```
-
-## Nota: 
-Si el mensaje de despues de iniciar el servidor, es que hay migraciones sin aplicar, apagar el servidor y usar el siguiente comando:
-
-```bash
+4:Aplicar las migraciones
 python manage.py migrate
-```
+_______________________________________________________________________________
 
-Y volver a iniciar el servidor.
+5:Crear Superuser 
+python manage.py createsuperuser
+_______________________________________________________________________________
+
+6:Ejecutar el servidor
+python manage.py runserver
