@@ -107,6 +107,7 @@ export const useUpdateProfile = () => {
 		onSuccess(response) {
 			queryClient.setQueryData(authKeys.profile(), response);
 			queryClient.setQueryData(userKeys.getByUsername(response.username), response);
+			queryClient.setQueryData(userKeys.getById(response.id), response)
 		},
 	});
 };

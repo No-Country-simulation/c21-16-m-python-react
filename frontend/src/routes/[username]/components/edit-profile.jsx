@@ -41,6 +41,7 @@ export const EditProfile = ({ show, onHide }) => {
 		enableReinitialize: true,
 	});
 
+	console.log(formik.values.images)
 	useEffect(() => {
 		if (isSuccess && username !== data.username) {
 			navigate(`/${data.username}`, { replace: true });
