@@ -1,9 +1,9 @@
 .container-hero {
 	background-color: #ff7a45;
 	background: url("../../multimedia/generales/fondo-landing.png");
-	height: 92vh;
+	height: 100vh;
 	width: 100vw;
-	min-height: 92vh;
+	min-height: 100vh;
 	position: relative;
 	overflow: hidden;
 }

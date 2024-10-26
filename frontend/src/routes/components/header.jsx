@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button, Container, Dropdown, Image, Navbar } from "react-bootstrap";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useAuth, useGetProfile, useSignout } from "@/features/auth";
-
+import user from "../../multimedia/SVGs/USER.svg";
 export const Header = () => {
 	const { isAuthenticated, isPending } = useAuth();
 	const profile = useGetProfile();
@@ -13,7 +13,7 @@ export const Header = () => {
 	};
 
 	return (
-		<Navbar sticky="top" expand="lg" className="bg-body-tertiary border-bottom">
+		<Navbar fixed="top" expand="lg" className="bg-body-tertiary border-bottom" style={{ padding: "0" }}>
 			<Container as="header">
 				<Navbar.Brand as={Link}>PostPlate</Navbar.Brand>
 				{isPending ? (
@@ -61,7 +61,13 @@ export const Header = () => {
 						</Navbar.Collapse>
 					</>
 				) : (
-					<Button variant="link" as={Link} to="/auth/login">
+					<Button
+						variant="link"
+						as={Link}
+						to="/auth/login"
+						style={{ textDecoration: "none", color: "orangered", display: "flex" }}
+					>
+						<img src={user} />
 						Iniciar Sesión
 					</Button>
 				)}

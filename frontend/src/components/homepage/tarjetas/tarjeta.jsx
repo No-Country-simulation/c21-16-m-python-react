@@ -25,12 +25,7 @@ function Tarjeta({ datos }) {
 				<Card.Text style={{ color: datos.colorTexto, fontFamily: "Aspira", fontSize: "1.02rem", textAlign: "center" }}>
 					{datos.parrafo}
 				</Card.Text>
-				<Card.Link
-					as={Link}
-					className="links-tarjeta"
-					style={{ backgroundColor: datos.botonColor }}
-					to="/auth/register"
-				>
+				<Card.Link as={Link} className="links-tarjeta" style={{ backgroundColor: datos.botonColor }} to={datos.link}>
 					{datos.boton}
 				</Card.Link>
 			</Card.Body>

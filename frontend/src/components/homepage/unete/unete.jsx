@@ -5,6 +5,7 @@ import Tarjeta from "../tarjetas/tarjeta";
 
 export const Unete = () => {
 	const datos = {
+		link: "/auth/register",
 		titulo: "Unete a la red social de comida",
 		parrafo:
 			"Únete a PostPlate y comparte sabores tus sabores con los demás. Puedes elegir libremente tus platos favoritos, compartirlos y vincular con personas.",
