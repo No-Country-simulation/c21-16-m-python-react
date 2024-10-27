@@ -17,6 +17,16 @@
 .container-hero form h1 {
 	font-size: 4rem;
 	color: #ffffff;
+	font-family: "Montserrat", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 600;
+	font-style: normal;
+}
+.container-hero form h2 {
+	font-family: "Montserrat", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 500;
+	font-style: italic;
 }
 .container-hero form input {
 	width: 80%;

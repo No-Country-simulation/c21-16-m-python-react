@@ -22,7 +22,7 @@ function Tarjeta({ datos }) {
 				<Card.Title style={{ color: datos.colorTexto, fontSize: "2.2rem", textAlign: "center" }}>
 					{datos.titulo}
 				</Card.Title>
-				<Card.Text style={{ color: datos.colorTexto, fontFamily: "Aspira", fontSize: "1.02rem", textAlign: "center" }}>
+				<Card.Text style={{ color: datos.colorTexto, fontSize: "1.02rem", textAlign: "center" }}>
 					{datos.parrafo}
 				</Card.Text>
 				<Card.Link as={Link} className="links-tarjeta" style={{ backgroundColor: datos.botonColor }} to={datos.link}>

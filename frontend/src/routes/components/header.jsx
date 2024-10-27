@@ -3,19 +3,32 @@ import { Button, Container, Dropdown, Image, Navbar } from "react-bootstrap";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useAuth, useGetProfile, useSignout } from "@/features/auth";
 import user from "../../multimedia/SVGs/USER.svg";
+import LOGO from "../../multimedia/generales/LOGO.png";
+import "./Header.css";
 export const Header = () => {
 	const { isAuthenticated, isPending } = useAuth();
 	const profile = useGetProfile();
-
 	const signout = useSignout();
 	const handleSignout = () => {
 		signout.mutate(null);
 	};
 
 	return (
-		<Navbar fixed="top" expand="lg" className="bg-body-tertiary border-bottom" style={{ padding: "0" }}>
+		<Navbar
+			fixed="top"
+			expand="lg"
+			className="bg-body-tertiary border-bottom header-main"
+			style={{ padding: "0", height: "6vh", overflow: "hidden" }}
+		>
 			<Container as="header">
-				<Navbar.Brand as={Link}>PostPlate</Navbar.Brand>
+				<Navbar.Brand
+					as={Link}
+					style={{ width: "15%", padding: "0", margin: "0" }}
+					className="d-flex justify-content-evenly align-items-center header-brand"
+				>
+					<img src={LOGO} style={{ height: "9vh", width: "auto" }} />
+					Post Plate
+				</Navbar.Brand>
 				{isPending ? (
 					"Loading..."
 				) : isAuthenticated ? (
@@ -66,6 +79,7 @@ export const Header = () => {
 						as={Link}
 						to="/auth/login"
 						style={{ textDecoration: "none", color: "orangered", display: "flex" }}
+						className="login-btn"
 					>
 						<img src={user} />
 						Iniciar Sesión
