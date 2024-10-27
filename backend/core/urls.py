@@ -33,5 +33,7 @@ urlpatterns = [
     # Rutas de la app friendship
     path('api/friends/', include('friendship.urls')),
 
+    path('api/preferences/', include('preferences.urls')),
+
     path('admin/', admin.site.urls),
 ]
