@@ -1,0 +1,6 @@
+{
+  "workbench.editor.customLabels.patterns": {
+    "**/src/routes/**/page.jsx": "${dirname} - Page",
+    "**/src/routes/**/layout.jsx": "${dirname} - Layout"
+  }
+}
