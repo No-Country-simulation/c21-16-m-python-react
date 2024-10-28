@@ -4,6 +4,7 @@ import * as Home from "./routes";
 import * as Login from "./routes/auth/login";
 import * as Register from "./routes/auth/register";
 import * as Profile from "./routes/[username]";
+import { FriendRequests } from "./components/homepage/sidebars/friends";
 
 const router = createBrowserRouter([
 	{
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
 				<Register.Page />
 			</RedirectAuthenticated>
 		),
+	},
+	/* Eliminar cuando se termine el sidebar */
+	{
+		path: "/friends/requests",
+		element: <FriendRequests />,
 	},
 ]);
 
