@@ -1,6 +1,6 @@
 import { mixed, object, string } from "yup";
 
-const content = string().label("Content").min(1).required().default("");
+const content = string().label("Content").default("");
 
 export const postSchema = object({
 	content,
