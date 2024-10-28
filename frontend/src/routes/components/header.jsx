@@ -18,7 +18,7 @@ export const Header = () => {
 			fixed="top"
 			expand="lg"
 			className="bg-body-tertiary border-bottom header-main"
-			style={{ padding: "0", height: "6vh", overflow: "hidden" }}
+			style={{ padding: "0", height: "6vh", zIndex: "10000" }}
 		>
 			<Container as="header">
 				<Navbar.Brand
