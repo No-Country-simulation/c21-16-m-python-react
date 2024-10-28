@@ -1,22 +1,27 @@
 import React from "react";
 import "./Unete.css";
+import socialfood from "../../../multimedia/comidas/social-food.webp";
 import Tarjeta from "../tarjetas/tarjeta";
-import socialfood from '../../../multimedia/comidas/social-food.jpg'
 
 export const Unete = () => {
-const datos={
-    titulo: "Unete a la red social de comida",
-    fondo: "#ffffff",
-    boton: "Registrarse",
-    display:"none",
-    colorTexto:"black"
-  }
-  return (
-    <section className="container-unete">
-      <article>
-        <Tarjeta datos={datos}/>
-        <img src={socialfood} alt="" />
-      </article>
-    </section>
-  );
+	const datos = {
+		link: "/auth/register",
+		titulo: "Unete a la red social de comida",
+		parrafo:
+			"Únete a PostPlate y comparte sabores tus sabores con los demás. Puedes elegir libremente tus platos favoritos, compartirlos y vincular con personas.",
+		boton: "Registrarse",
+		botonColor: "#FF7926",
+		display: "none",
+		colorTexto: "black",
+		clase: "tarjeta-unete",
+		bordes: "0",
+	};
+	return (
+		<section className="container-unete">
+			<article>
+				<Tarjeta datos={datos} />
+				<img src={socialfood} alt="" />
+			</article>
+		</section>
+	);
 };
