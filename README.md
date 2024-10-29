@@ -3,18 +3,20 @@
 ### Industria: Social Media
 
 ## Descripción
+
 Este proyecto es una red social enfocada en la gastronomía, donde los usuarios podrán compartir y explorar recetas o publicaciones relacionadas con la comida. La plataforma facilita la interacción y el descubrimiento de nuevas ideas culinarias, creando una comunidad donde los amantes de la comida pueden expresarse y conectarse.
 
 ## Colaboradores
 
 - **Carlos Ayala** - Frontend - [LinkedIn](#)
-- **Benjamin Moreno** - Frontend - [LinkedIn](#)
+- **Benjamin Moreno** - Frontend - [LinkedIn](https://www.linkedin.com/in/benjamorenosaez/)
 - **Rafael Gauna** - Backend - [LinkedIn](#)
 - **Ramón Pérez** - Backend - [LinkedIn](https://www.linkedin.com/in/ram%C3%B3n-felipe-perez-osorio/)
 
 ## Tecnologías Utilizadas
 
 ### Backend
+
 - **Python**
 - **Django**
 - **Django Rest Framework**
@@ -23,6 +25,7 @@ Este proyecto es una red social enfocada en la gastronomía, donde los usuarios 
 - **JWT** (autenticación)
 
 ### Frontend
+
 - **HTML**
 - **CSS**
 - **JavaScript**

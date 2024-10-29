@@ -18,7 +18,7 @@ export const Header = () => {
 			fixed="top"
 			expand="lg"
 			className="bg-body-tertiary border-bottom header-main"
-			style={{ padding: "0", height: "6vh", overflow: "hidden" }}
+			style={{ padding: "0", height: "6vh" }}
 		>
 			<Container as="header">
 				<Navbar.Brand
@@ -26,7 +26,7 @@ export const Header = () => {
 					style={{ width: "15%", padding: "0", margin: "0" }}
 					className="d-flex justify-content-evenly align-items-center header-brand"
 				>
-					<img src={LOGO} style={{ height: "9vh", width: "auto" }} />
+					{/* <img src={LOGO} style={{ height: "9vh", width: "auto" }} /> */}
 					Post Plate
 				</Navbar.Brand>
 				{isPending ? (
