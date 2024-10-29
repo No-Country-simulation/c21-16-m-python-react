@@ -1,3 +1,3 @@
 export const Comidas = () => {
-	return <div>C</div>;
+	return <div>Casds</div>;
 };

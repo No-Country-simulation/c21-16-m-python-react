@@ -6,6 +6,7 @@ import * as Register from "./routes/auth/register";
 import * as Profile from "./routes/[username]";
 import { Solicitudes } from "./pages/solicitudes";
 import { Comidas } from "./pages/comidas";
+import { Amistades } from "./pages/amistades";
 
 const router = createBrowserRouter([
 	{
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
 			{
 				path: "/comidas",
 				element: <Comidas />,
+			},
+			{
+				path: "/amistades",
+				element: <Amistades />,
 			},
 		],
 	},

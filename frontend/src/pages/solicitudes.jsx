@@ -8,7 +8,11 @@ export const Solicitudes = () => {
 	// api backend
 	// ---------------backend------------
 
-	const solicitudes = [{ id: "", img: foto, nombre: "Ramon", user: "@user5000", enlace: "#" }];
+	const solicitudes = [
+		{ id: "", img: foto, nombre: "Ramon", user: "@user5000", enlace: "#" },
+		{ id: "", img: foto, nombre: "Ramon", user: "@user5000", enlace: "#" },
+		{ id: "", img: foto, nombre: "Ramon", user: "@user5000", enlace: "#" },
+	];
 	const aceptarSoli = () => {
 		alert("aceptaste");
 	};
@@ -16,7 +20,7 @@ export const Solicitudes = () => {
 		alert("rechazaste");
 	};
 	return (
-		<Stack gap={3} className="h-100 w-100" style={{ backgroundColor: "rgba(255, 68, 0, 0.3)" }}>
+		<Stack gap={3} className="h-100 w-100" style={{ backgroundColor: "rgba(255, 68, 0, 0.2)" }}>
 			{solicitudes.map((solicitud, index) => (
 				<div className="p-2 solicitud-entrante" key={index}>
 					<img src={solicitud.img} className="flex-2" />
@@ -24,7 +28,7 @@ export const Solicitudes = () => {
 						<h6>{solicitud.nombre}</h6>
 						<strong maxLe>{solicitud.user}</strong>
 					</div>
-					<Button variant="light" size="sm" style={{ color: "orangered" }}>
+					<Button variant="light" size="sm" style={{ color: "orangered" }} onClick={() => aceptarSoli()}>
 						aceptar
 					</Button>{" "}
 					<Button variant="light" size="sm" style={{ color: "orangered" }}>
@@ -33,11 +37,6 @@ export const Solicitudes = () => {
 					<Button variant="primary" size="sm">
 						Ver Perfil
 					</Button>
-					{/* <Button as={Link} className="ver-perfil">
-						Ver perfil
-					</Button>
-					<Button onClick={() => aceptarSoli()}>Aceptar</Button>
-					<Button onClick={() => rechazarSoli()}>Rechazar</Button> */}
 				</div>
 			))}
 		</Stack>

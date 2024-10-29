@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import "./Leftsidebar.css";
 import { Stack } from "react-bootstrap";
-import { BuildingStorefrontIcon, HomeIcon, UserIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { BuildingStorefrontIcon, HomeIcon, UserGroupIcon, UserIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 export const Leftsidebar = () => {
 	return (
@@ -35,6 +35,16 @@ export const Leftsidebar = () => {
 					}}
 				/>
 				Lista de comidas
+			</NavLink>
+			<NavLink to="/amistades">
+				<UserGroupIcon
+					style={{
+						width: "24px",
+						height: "24px",
+						margin: "0 10px",
+					}}
+				/>
+				Amistades
 			</NavLink>
 			<NavLink>
 				<UserIcon
