@@ -24,6 +24,8 @@ export const EditProfile = ({ show, onHide }) => {
 		},
 		validationSchema: editProfileSchema,
 		onSubmit: (values) => {
+			if (typeof values.images === "string") delete values.images;
+
 			const formData = new FormData();
 			Object.entries(values).forEach(([key, value]) => {
 				formData.append(key, value);

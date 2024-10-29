@@ -1,3 +1,7 @@
+import base64
+import six
+import uuid
+import imghdr
 import cloudinary.uploader
 
 from rest_framework import serializers
@@ -83,9 +87,25 @@ class LoginEmailSerializer(serializers.Serializer):
         return data
 
 
+class CustomImageField(serializers.Field):
+    def to_representation(self, value):
+        return value
+
+    def to_internal_value(self, data):
+        # Si es "null" o None, retornar None
+        if data == "null" or data is None:
+            return None
+
+        # Si es un archivo, retornar el archivo
+        if hasattr(data, 'file'):
+            return data
+
+        raise serializers.ValidationError("Tipo de dato inválido para imagen")
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source='get_role', read_only=True)
-    images = serializers.SerializerMethodField()
+    images = CustomImageField(required=False, allow_null=True)
 
     class Meta:
         model = CustomUser
@@ -93,25 +113,56 @@ class ProfileSerializer(serializers.ModelSerializer):
                   'last_name', 'images', 'verified', 'date_joined', 'role')
 
     def update(self, instance, validated_data):
-        image_file = validated_data.pop('images', None)
+        try:
+            # Verificar si 'images' está en validated_data
+            if 'images' in validated_data:
+                image_value = validated_data.pop('images')
 
-        if image_file:
-            if instance.image_public_id:
-                cloudinary.uploader.destroy(instance.image_public_id)
+                # Si hay una imagen existente y se recibió None, eliminarla
+                if image_value is None:
+                    if instance.image_public_id:
+                        try:
+                            cloudinary.uploader.destroy(
+                                instance.image_public_id)
+                        except Exception as e:
+                            print(
+                                f"Error al eliminar imagen anterior: {str(e)}")
 
-            upload_result = cloudinary.uploader.upload(
-                image_file,
-                folder=f'blog_thumbnails/{instance.username}'
-            )
-            instance.images = upload_result['secure_url']
-            instance.image_public_id = upload_result['public_id']
+                    instance.images = None
+                    instance.image_public_id = None
 
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+                # Si se envió un archivo
+                elif image_value:
+                    # Eliminar imagen anterior si existe
+                    if instance.image_public_id:
+                        try:
+                            cloudinary.uploader.destroy(
+                                instance.image_public_id)
+                        except Exception as e:
+                            print(
+                                f"Error al eliminar imagen anterior: {str(e)}")
 
-        instance.save()
-        return instance
-    def get_images(self, obj):
-        if obj.images:
-            return obj.images
-        return None
+                    # Subir nueva imagen
+                    upload_result = cloudinary.uploader.upload(
+                        image_value,
+                        folder=f'blog_thumbnails/{instance.username}',
+                        resource_type='auto'
+                    )
+                    instance.images = upload_result['secure_url']
+                    instance.image_public_id = upload_result['public_id']
+
+            # Actualizar otros campos
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+
+            instance.save()
+            return instance
+
+        except Exception as e:
+            raise serializers.ValidationError(
+                f"Error al procesar la imagen: {str(e)}")
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['images'] = instance.images if instance.images else None
+        return data

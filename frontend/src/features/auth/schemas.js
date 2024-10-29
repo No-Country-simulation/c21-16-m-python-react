@@ -8,16 +8,21 @@ const password = string().label("Password").min(8).required().default("");
 const images = mixed()
 	.label("Profile")
 	.test("is-valid-type", "Invalid profile picture", (file) => {
-		if (!file) return true;
-		const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+		if (file instanceof File) {
+			const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+			return SUPPORTED_FORMATS.includes(file.type);
+		}
 
-		return SUPPORTED_FORMATS.includes(file.type);
+		return true;
 	})
 	.test("is-valid-size", "File too large", (file) => {
-		if (!file) return true;
-		const MAX_SIZE = 1024 * 1024 * 2; // 2MB
+		if (file instanceof File) {
+			const MAX_SIZE = 1024 * 1024 * 2; // 2MB
 
-		return file.size <= MAX_SIZE;
+			return file.size <= MAX_SIZE;
+		}
+
+		return true;
 	})
 	.nullable()
 	.default(null);

@@ -7,6 +7,7 @@ import * as Profile from "./routes/[username]";
 import { Solicitudes } from "./pages/solicitudes";
 import { Comidas } from "./pages/comidas";
 import { Amistades } from "./pages/amistades";
+import { FriendRequests } from "./components/homepage/sidebars/friends";
 
 const router = createBrowserRouter([
 	{
@@ -50,6 +51,11 @@ const router = createBrowserRouter([
 				<Register.Page />
 			</RedirectAuthenticated>
 		),
+	},
+	/* Eliminar cuando se termine el sidebar */
+	{
+		path: "/friends/requests",
+		element: <FriendRequests />,
 	},
 ]);
 
