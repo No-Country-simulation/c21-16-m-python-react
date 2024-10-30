@@ -43,6 +43,7 @@ PROJECT_APPS = [
     'publication',
     'roles',
     'friendship',
+    'preferences',
 ]
 
 THIRD_PARTY_APPS = [
