@@ -14,12 +14,7 @@ export const Header = () => {
 	};
 
 	return (
-		<Navbar
-			fixed="top"
-			expand="lg"
-			className="bg-body-tertiary border-bottom header-main"
-			style={{ padding: "0", height: "6vh", overflow: "hidden" }}
-		>
+		<Navbar className="border-bottom">
 			<Container as="header">
 				<Navbar.Brand
 					as={Link}

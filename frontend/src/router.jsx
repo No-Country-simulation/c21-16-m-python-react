@@ -5,6 +5,7 @@ import * as Login from "./routes/auth/login";
 import * as Register from "./routes/auth/register";
 import * as Profile from "./routes/[username]";
 import * as Friends from "./routes/[username]/friends";
+import * as Requests from "./routes/[username]/requests";
 
 const router = createBrowserRouter([
 	{
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
 					{
 						index: true,
 						element: <Profile.Page />,
+					},
+					{
+						path: "requests",
+						element: <Requests.Page />,
 					},
 					{
 						path: "friends",

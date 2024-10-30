@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Button, Col, Image, Modal, Placeholder, Ratio, Row, Stack } from "react-bootstrap";
-import { useGetUserByUsername } from "@/features/users";
+import { Link, useParams } from "react-router-dom";
+import { Badge, Button, Col, Image, Modal, Placeholder, Ratio, Row, Stack } from "react-bootstrap";
 import { HTTP_STATUS } from "@/shared/utils";
+import { useGetUserByUsername } from "@/features/users";
 import { useGetProfile } from "@/features/auth";
+import { useAcceptRequest, useGetFriends, useGetPending, useRemoveFriend, useSendRequest } from "@/features/friends";
 import { EditProfile } from "./edit-profile";
 
 const MODALS = {
@@ -16,10 +17,22 @@ export const UserProfile = () => {
 
 	const { username } = useParams();
 
-	const user = useGetProfile();
-	const { data: account, isPending, isError, error } = useGetUserByUsername(username);
+	const auth_user = useGetProfile();
+	const user = useGetUserByUsername(username);
 
-	return isPending ? (
+	const requests = useGetPending();
+	const friends = useGetFriends();
+
+	const accept = useAcceptRequest();
+
+	const request = requests.data?.find((r) => r.id_user2 === auth_user.data?.id);
+	const sent = requests.data?.find((r) => r.id_user1 === auth_user.data?.id);
+	const friend = friends.data?.find((f) => [f.id_user1, f.id_user2].includes(auth_user.data?.id));
+
+	const addFriend = useSendRequest();
+	const removeFriend = useRemoveFriend();
+
+	return user.isPending || auth_user.isPending || friends.isPending || requests.isPending ? (
 		<Stack>
 			<Placeholder style={{ width: "120px", height: "120px", borderRadius: "50%" }} />
 
@@ -41,66 +54,122 @@ export const UserProfile = () => {
 				</Col>
 			</Row>
 		</Stack>
-	) : isError ? (
+	) : user.isError ? (
 		<div className="p-5 text-center text-secondary">
-			<p className="m-0">{error.status === HTTP_STATUS.NOT_FOUND ? "User not found." : "Something went wrong."}</p>
+			<p className="m-0">{user.error.status === HTTP_STATUS.NOT_FOUND ? "User not found." : "Something went wrong."}</p>
 		</div>
 	) : (
 		<>
-			<Stack>
-				<Ratio
-					aspectRatio="1x1"
-					style={{
-						maxWidth: "120px",
-						maxHeight: "120px",
-					}}
-					role="button"
-					className="h-100 w-100"
-					onClick={() => setModals(MODALS.VIEW_PROFILE)}
-				>
-					{account.images ? (
-						<Image src={account.images} roundedCircle fluid className="object-fit-contain border" />
-					) : (
-						<div className="bg-secondary w-100 h-100 rounded-circle d-flex justify-content-center align-items-center">
-							<span className="text-white fs-1 fw-bold">
-								{[account.first_name, account.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
-							</span>
-						</div>
-					)}
-				</Ratio>
-				<Row>
-					<Col>
-						<h2 className="mb-0">
-							{account.first_name} {account.last_name}
-						</h2>
-						<p className="m-0 text-muted">@{account.username}</p>
-					</Col>
-					<Col className="text-end">
-						{user.isSuccess ? (
-							user.data.username === username ? (
+			<Stack gap={3}>
+				<Stack>
+					<Ratio
+						aspectRatio="1x1"
+						style={{
+							maxWidth: "120px",
+							maxHeight: "120px",
+						}}
+						role="button"
+						className="h-100 w-100"
+						onClick={() => setModals(MODALS.VIEW_PROFILE)}
+					>
+						{user.data.images ? (
+							<Image src={user.data.images} roundedCircle fluid className="object-fit-contain border" />
+						) : (
+							<div className="bg-secondary w-100 h-100 rounded-circle d-flex justify-content-center align-items-center">
+								<span className="text-white fs-1 fw-bold">
+									{[user.data.first_name, user.data.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
+								</span>
+							</div>
+						)}
+					</Ratio>
+					<Row>
+						<Col>
+							<h2 className="mb-0">
+								{user.data.first_name} {user.data.last_name}
+							</h2>
+							<p className="m-0 text-muted">@{user.data.username}</p>
+						</Col>
+						<Col className="text-end">
+							{requests.isPending || friends.isPending || auth_user.isPending ? (
+								<Placeholder.Button
+									variant="primary"
+									xs={3}
+									style={{
+										height: "32px",
+									}}
+								/>
+							) : auth_user.data.username === username ? (
 								<Button variant="primary" size="sm" onClick={() => setModals(MODALS.EDIT_PROFILE)}>
 									Edit Profile
 								</Button>
-							) : null
-						) : null}
-					</Col>
-				</Row>
+							) : request ? (
+								<Button
+									variant="primary"
+									size="sm"
+									disabled={accept.isPending}
+									onClick={() => {
+										accept.mutate(request.id);
+									}}
+								>
+									{accept.isPending ? "..." : "Accept Request"}
+								</Button>
+							) : sent ? (
+								<Button variant="primary" size="sm" disabled>
+									Request Sent
+								</Button>
+							) : friend ? (
+								<Button
+									variant="danger"
+									size="sm"
+									onClick={() => removeFriend.mutate(friend.id)}
+									disabled={removeFriend.isPending}
+								>
+									{removeFriend.isPending ? "..." : "Unfriend"}
+								</Button>
+							) : (
+								<Button
+									variant="primary"
+									size="sm"
+									onClick={() => {
+										addFriend.mutate(user.data.id);
+									}}
+									disabled={addFriend.isPending}
+								>
+									{addFriend.isPending ? "..." : "Add Friend"}
+								</Button>
+							)}
+						</Col>
+					</Row>
+				</Stack>
+
+				<Stack>
+					<Row>
+						<Col>
+							<Button as={Link} variant="secondary" size="sm" to={`/${username}/friends`}>
+								Friends{" "}
+								<Badge bg="primary" className="ms-1">
+									{friends.data.length}
+								</Badge>
+							</Button>
+						</Col>
+					</Row>
+				</Stack>
 			</Stack>
 
 			<Modal show={modals === MODALS.VIEW_PROFILE} onHide={() => setModals("")} centered>
 				<Modal.Header closeButton>
 					<Modal.Title>
-						{account.first_name} {account.last_name}
+						{user.data.first_name} {user.data.last_name}
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Ratio aspectRatio="1x1" className="h-100 w-100">
-						{account.images ? (
-							<Image src={account.images} roundedCircle fluid className="object-fit-contain border" />
+						{user.data.images ? (
+							<Image src={user.data.images} roundedCircle fluid className="object-fit-contain border" />
 						) : (
 							<div className="bg-secondary w-100 h-100 rounded-circle d-flex justify-content-center align-items-center">
 								<span className="text-white fs-1 fw-bold">
-									{[account.first_name, account.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
+									{[user.data.first_name, user.data.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
 								</span>
 							</div>
 						)}
@@ -108,8 +177,8 @@ export const UserProfile = () => {
 				</Modal.Body>
 			</Modal>
 
-			{user.isSuccess ? (
-				<EditProfile show={modals === MODALS.EDIT_PROFILE} onHide={() => setModals("")} user={user.data} />
+			{auth_user.isSuccess ? (
+				<EditProfile show={modals === MODALS.EDIT_PROFILE} onHide={() => setModals("")} user={auth_user.data} />
 			) : null}
 		</>
 	);
