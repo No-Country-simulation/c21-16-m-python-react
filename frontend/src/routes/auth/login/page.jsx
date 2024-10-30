@@ -2,8 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { signinInitialValues, signinSchema, useLogin } from "@/features/auth";
-import '../Auth.css'
+import "../Auth.css";
 import cebollin from "../../../multimedia/generales/cebollin-landing.png";
+import hchica from "../../../multimedia/generales/hizquierda-landing.png";
+import hgrande from "../../../multimedia/generales/hderecha-landing.png";
+import pchico from "../../../multimedia/generales/platochico-landing.png";
+import home from "../../../multimedia/SVGs/HOME.svg";
+
 // import platoC from "../../../multimedia/generales/platochico-landing.png";
 export const Page = () => {
 	const navigate = useNavigate();
@@ -23,13 +28,27 @@ export const Page = () => {
 	});
 
 	return (
-		<Container className="d-flex justify-content-center align-items-center container-auth" style={{ minHeight: "92vh",height:"92vh", minWidth: "100vw"}}>
-			<img src={cebollin} className="platoG-registro cebollin-auth"/>
+		<Container
+			className="d-flex justify-content-center align-items-center container-auth"
+			style={{ minHeight: "100vh", height: "92vh", minWidth: "100vw" }}
+		>
+			<img src={cebollin} className="img-auth-login cebollin" />
+			<img src={hchica} className="img-auth-login hoja-chica" />
+			<img src={hgrande} className="img-auth-login hoja-grande" />
+			<img src={pchico} className="img-auth-login p-chico" />
+			<Link to="/">
+				<img src={home} className="img-auth-login home" />
+			</Link>
+
 			<Row className="w-100">
-				<Col md={6} lg={4} className="mx-auto" style={{ borderRadius: "10px", padding: "5vh", backgroundColor: "#F8F9FA"}}>
+				<Col
+					md={6}
+					lg={4}
+					className="mx-auto form-iniciar-sesion"
+					style={{ borderRadius: "10px", padding: "5vh", backgroundColor: "#F8F9FA" }}
+				>
 					<div className="mb-4 text-center">
 						<h1>Inicia sesión</h1>
-						<p className="parrafo-auth">Ingrese su correo electrónico a continuación para iniciar sesión en su cuenta.</p>
 					</div>
 
 					<Form onSubmit={formik.handleSubmit} noValidate className="d-grid gap-2">
@@ -71,7 +90,7 @@ export const Page = () => {
 
 					<div className="mt-2">
 						<p>
-						¿No tienes cuenta? <Link to="/auth/register">Registrate</Link>
+							¿No tienes cuenta? <Link to="/auth/register">Registrate</Link>
 						</p>
 					</div>
 				</Col>

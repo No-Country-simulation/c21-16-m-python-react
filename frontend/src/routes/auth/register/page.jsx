@@ -2,9 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { signupInitialValues, signupSchema, useRegister } from "@/features/auth";
-import '../Auth.css'
+import "../Auth.css";
 import platoG from "../../../multimedia/generales/platogrande-landing.png";
 import platoC from "../../../multimedia/generales/platochico-landing.png";
+import home from "../../../multimedia/SVGs/HOME.svg";
+
 export const Page = () => {
 	const navigate = useNavigate();
 	const { mutate, isPending } = useRegister();
@@ -24,10 +26,13 @@ export const Page = () => {
 	return (
 		<Container
 			className="d-flex justify-content-center align-items-center container-auth"
-			style={{ minHeight: "92vh", minWidth: "100vw" }}
+			style={{ minHeight: "100vh", minWidth: "100vw" }}
 		>
-			<img src={platoG} className="platoG-registro " />
-			<img src={platoC} className="platoC-registro" />
+			<img src={platoG} className="img-auth-login platoG-registro " />
+			<img src={platoC} className="img-auth-login platoC-registro" />
+			<Link to="/">
+				<img src={home} className="img-auth-login home" />
+			</Link>
 			<Row className="w-100">
 				<Col
 					md={6}
@@ -37,7 +42,6 @@ export const Page = () => {
 				>
 					<div className="mb-4">
 						<h1>Registro</h1>
-						<p className="parrafo-auth">Ingresa tu información para crear una cuenta.</p>
 					</div>
 
 					<Form onSubmit={formik.handleSubmit} noValidate className="d-grid gap-2">
@@ -125,7 +129,7 @@ export const Page = () => {
 
 					<div className="mt-2">
 						<p>
-						¿Ya tienes una cuenta? <Link to="/auth/login">Ingresa</Link>
+							¿Ya tienes una cuenta? <Link to="/auth/login">Ingresa</Link>
 						</p>
 					</div>
 				</Col>

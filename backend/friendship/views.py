@@ -19,6 +19,7 @@ class FriendViewSet(viewsets.ModelViewSet):
     queryset = Friends.objects.all().order_by('-application_date')
     # Permite solo a usuarios autenticados acceder a esta vista
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     def get_queryset(self):
         user = self.request.user

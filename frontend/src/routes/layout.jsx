@@ -28,7 +28,7 @@ export const Layout = () => {
 					</Row>
 				</Container>
 			) : (
-				<Stack className="h-100">
+				<Stack>
 					<Hero />
 					<Tarjetas />
 					<Unete />
