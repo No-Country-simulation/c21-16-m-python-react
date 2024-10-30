@@ -15,7 +15,7 @@ export const PostsFeed = () => {
 			<p>Error</p>
 		</div>
 	) : data.results.length === 0 ? (
-		<div>
+		<div className="py-5 text-center text-secondary">
 			<p>No posts yet</p>
 		</div>
 	) : (

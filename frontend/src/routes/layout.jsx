@@ -15,7 +15,7 @@ export const Layout = () => {
 			{isPending ? (
 				<div className="flex-grow-1 d-flex justify-content-center items-content-center text-center">Loading...</div>
 			) : isAuthenticated ? (
-				<Container className="h-100" style={{ paddingTop: "6vh", border: "solid black 1px" }}>
+				<Container className="h-100">
 					<Row className="h-100 w-100">
 						<Col xs={4} className="border-end">
 							<Leftsidebar />
@@ -23,9 +23,7 @@ export const Layout = () => {
 						<Col xs={5}>
 							<Outlet />
 						</Col>
-						<Col xs={3} className="border-start">
-							#TODO: Right Aside
-						</Col>
+						<Col xs={3} className="border-start"></Col>
 					</Row>
 				</Container>
 			) : (
