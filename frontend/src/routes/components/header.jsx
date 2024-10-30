@@ -26,7 +26,7 @@ export const Header = () => {
 					style={{ width: "15%", padding: "0", margin: "0" }}
 					className="d-flex justify-content-evenly align-items-center header-brand"
 				>
-					<img src={LOGO} style={{ height: "9vh", width: "auto" }} />
+					{/* <img src={LOGO} style={{ height: "9vh", width: "auto" }} /> */}
 					Post Plate
 				</Navbar.Brand>
 				{isPending ? (
