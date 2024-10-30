@@ -14,6 +14,7 @@ export const useGetUserById = (id) => {
 	return useQuery({
 		queryKey: userKeys.getById(id),
 		queryFn: () => getById(accessToken, id),
+		enabled: !!accessToken || !id,
 	});
 };
 

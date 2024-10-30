@@ -10,17 +10,17 @@ export const EditProfile = ({ show, onHide }) => {
 	const { username } = useParams();
 	const navigate = useNavigate();
 
-	const { data, isSuccess } = useGetProfile();
+	const user = useGetProfile();
 
 	const { mutate, isPending } = useUpdateProfile();
 
 	const formik = useFormik({
 		initialValues: {
-			username: data.username,
-			first_name: data.first_name,
-			last_name: data.last_name,
-			email: data.email,
-			images: data.images,
+			username: user.data?.username,
+			first_name: user.data?.first_name,
+			last_name: user.data?.last_name,
+			email: user.data?.email,
+			images: user.data?.images,
 		},
 		validationSchema: editProfileSchema,
 		onSubmit: (values) => {
@@ -32,7 +32,8 @@ export const EditProfile = ({ show, onHide }) => {
 			});
 
 			mutate(formData, {
-				onSuccess() {
+				onSuccess(data) {
+					if (username !== data.username) navigate(`/${data.username}`, { replace: true });
 					onHide();
 				},
 				onError(err) {
@@ -44,12 +45,6 @@ export const EditProfile = ({ show, onHide }) => {
 	});
 
 	console.log(formik.values.images)
-	useEffect(() => {
-		if (isSuccess && username !== data.username) {
-			navigate(`/${data.username}`, { replace: true });
-		}
-	}, [data.username, navigate, username, isSuccess]);
-
 	useEffect(() => {
 		if (show) {
 			formik.resetForm();
@@ -96,7 +91,7 @@ export const EditProfile = ({ show, onHide }) => {
 												className="bg-secondary rounded-circle d-flex justify-content-center align-items-center"
 											>
 												<span className="text-white fs-1 fw-bold">
-													{[data.first_name, data.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
+													{[user.data?.first_name, user.data?.last_name].map((n) => n.charAt(0).toUpperCase()).join("")}
 												</span>
 											</div>
 										)}
