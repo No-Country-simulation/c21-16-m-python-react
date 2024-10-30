@@ -65,7 +65,7 @@ export const PostCreate = () => {
 							as="textarea"
 							rows={4}
 							isInvalid={formik.touched.content && formik.errors.content}
-							placeholder="What's going on?"
+							placeholder="Publicación"
 							disabled={isPending}
 						/>
 						<Form.Control.Feedback type="invalid">{formik.errors.content}</Form.Control.Feedback>
@@ -126,7 +126,7 @@ export const PostCreate = () => {
 				</Col>
 				<Col className="text-end">
 					<Button type="submit" disabled={isPending}>
-						{isPending ? "Posting..." : "Post"}
+						{isPending ? "Publicando..." : "Publicar"}
 					</Button>
 				</Col>
 			</Row>

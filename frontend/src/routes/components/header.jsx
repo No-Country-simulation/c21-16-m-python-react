@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button, Container, Dropdown, Image, Navbar } from "react-bootstrap";
+import { Button, Container, Dropdown, Image, Navbar, Ratio } from "react-bootstrap";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useAuth, useGetProfile, useSignout } from "@/features/auth";
 import user from "../../multimedia/SVGs/USER.svg";
@@ -26,7 +26,7 @@ export const Header = () => {
 					style={{ width: "15%", padding: "0", margin: "0" }}
 					className="d-flex justify-content-evenly align-items-center header-brand"
 				>
-					<img src={LOGO} style={{ height: "9vh", width: "auto" }} />
+					{/* <img src={LOGO} style={{ height: "9vh", width: "auto" }} /> */}
 					Post Plate
 				</Navbar.Brand>
 				{isPending ? (
@@ -35,14 +35,22 @@ export const Header = () => {
 					<>
 						<Navbar.Toggle />
 						<Navbar.Collapse className="justify-content-end">
-							<Dropdown>
+							<Dropdown variant="secondary">
 								<Dropdown.Toggle className="d-flex d-flex justify-content-center align-items-center">
 									{profile.isPending ? (
 										<p className="m-0">...</p>
 									) : profile.isError ? (
 										<ExclamationTriangleIcon style={{ width: "20px", height: "20px" }} className="text-white" />
 									) : profile.data.images ? (
-										<Image src={profile.data.images} roundedCircle fluid className="object-fit-contain border" />
+										<Ratio
+											aspectRatio="1x1"
+											style={{
+												width: "2rem",
+												height: "2rem",
+											}}
+										>
+											<Image src={profile.data.images} roundedCircle fluid className="object-fit-contain border" />
+										</Ratio>
 									) : (
 										<div className="w-100 h-100 d-flex justify-content-center align-items-center">
 											<span className="text-white fs-6 fw-bold">
@@ -54,7 +62,7 @@ export const Header = () => {
 									)}
 								</Dropdown.Toggle>
 
-								<Dropdown.Menu>
+								<Dropdown.Menu align="end">
 									<Dropdown.ItemText as="div">
 										<p className="lh-1 m-0 fw-bold">
 											{profile.data?.first_name} {profile.data?.last_name}

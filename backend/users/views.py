@@ -62,43 +62,55 @@ class ProfileViewSet(viewsets.ViewSet):
     parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self):
-        """Obtiene el perfil del usuario autenticado."""
         return get_object_or_404(CustomUser, id=self.request.user.id)
 
     def retrieve(self, request, *args, **kwargs):
-        """Obtiene el perfil del usuario autenticado."""
         user = self.get_object()
         serializer = self.serializer_class(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
-        """Actualiza el perfil del usuario autenticado."""
-        user = self.get_object()
-        serializer = self.serializer_class(
-            user,
-            data=request.data,
-            partial=True,
-            context={'request': request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = self.get_object()
+            serializer = self.serializer_class(
+                user,
+                data=request.data,
+                partial=True,
+                context={'request': request}
+            )
+
+            if serializer.is_valid():
+                # La lógica de actualización de imagen está en el serializer
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response(
+                {'error': f'Error al actualizar el perfil: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def destroy(self, request, *args, **kwargs):
-        """Elimina el perfil del usuario autenticado."""
-        user = self.get_object()
-        if user.images:
-            public_id = user.images.split('/')[-1].split('.')[0]
-            cloudinary.uploader.destroy(public_id)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+        try:
+            user = self.get_object()
+            if user.image_public_id:  # Usar image_public_id en lugar de parsear la URL
+                cloudinary.uploader.destroy(user.image_public_id)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response(
+                {'error': f'Error al eliminar el perfil: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 # Vista para ver el perfil de otras cuentas
+
+
 class FriendProfileViewSet(viewsets.ViewSet):
     """Muestra el perfil de un amigo (otro usuario)."""
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden ver perfiles
+    # Solo usuarios autenticados pueden ver perfiles
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
 
     def retrieve(self, request, pk=None):
@@ -109,22 +121,20 @@ class FriendProfileViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-
 # Vista para ver el perfil de otras cuentas autenticados
 class UsernameProfileViewSet(viewsets.ViewSet):
     """Muestra el perfil de un amigo (otro usuario)."""
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden ver perfiles
+    # Solo usuarios autenticados pueden ver perfiles
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
-    
+
     @action(detail=False, methods=['get'], url_path='(?P<username>[^/.]+)')
     def by_username(self, request, username=None):
-      try:
-        user = CustomUser.objects.get(username=username)
-      except CustomUser.DoesNotExist:
-        raise NotFound('Usuario no encontrado')
-      
-      serializer = self.serializer_class(user)
-      return Response(serializer.data, status=status.HTTP_200_OK)
-      
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            raise NotFound('Usuario no encontrado')
+
+        serializer = self.serializer_class(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)

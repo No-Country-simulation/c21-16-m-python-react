@@ -31,7 +31,7 @@ export const PostItem = ({ post }) => {
 				<Card.Text>{post.content}</Card.Text>
 				<PostGallery files={post.files_set} />
 			</Card.Body>
-			<Card.Footer>#TODO: Footer</Card.Footer>
+			{/* <Card.Footer>#TODO: Footer</Card.Footer> */}
 		</Card>
 	);
 };
