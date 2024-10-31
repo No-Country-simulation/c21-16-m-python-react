@@ -134,7 +134,7 @@ export const Page = () => {
 
 				<Stack gap={3}>
 					{friends.length === 0 ? (
-						<div className="text-muted text-center">You have no friends.</div>
+						<div className="text-muted text-center">No tienes amigos agregados.</div>
 					) : (
 						friends.map((r) => <Friend key={r.id} request={r} />)
 					)}

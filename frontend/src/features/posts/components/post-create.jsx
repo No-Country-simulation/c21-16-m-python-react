@@ -25,7 +25,7 @@ export const PostCreate = () => {
 			mutate(formData, {
 				onSuccess() {
 					formik.resetForm();
-					toast.success("Post created successfully");
+					toast.success("Publicación creada exitosamente");
 				},
 				onError(error) {
 					toast.error(error.message);

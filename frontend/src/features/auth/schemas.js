@@ -1,13 +1,13 @@
 import { mixed, object, ref, string } from "yup";
 
-const username = string().label("Username").required().default("");
-const first_name = string().label("First Name").required().default("");
-const last_name = string().label("Last Name").required().default("");
-const email = string().label("Email").email().required().default("");
-const password = string().label("Password").min(8).required().default("");
+const username = string().label("Username").required("Usuario requerido").default("");
+const first_name = string().label("First Name").required("Nombre requerido").default("");
+const last_name = string().label("Last Name").required("Apellido requerido").default("");
+const email = string().label("Email").email().required("Correo requerido").default("");
+const password = string().label("Password").min(8, "La contraseña debe tener al menos 8 caracteres").required("Contraseña requerida").default("");
 const images = mixed()
 	.label("Profile")
-	.test("is-valid-type", "Invalid profile picture", (file) => {
+	.test("is-valid-type", "Foto de perfil no válida", (file) => {
 		if (file instanceof File) {
 			const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
 			return SUPPORTED_FORMATS.includes(file.type);
@@ -41,8 +41,8 @@ export const signupSchema = object({
 	password,
 	password2: string()
 		.label("Confirm Password")
-		.oneOf([ref("password")], "Passwords must match.")
-		.required()
+		.oneOf([ref("password")], "Las contraseñas deben coincidir.")
+		.required("Confirmar la contraseña")
 		.default(""),
 });
 

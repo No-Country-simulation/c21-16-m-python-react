@@ -180,6 +180,8 @@ export const Page = () => {
 
 			<Stack as="section" gap={5} className="mt-3">
 				<Stack gap={2}>
+					<br/>
+					<hr/>
 					<h5>Pendientes</h5>
 
 					<Stack gap={2}>
@@ -192,11 +194,12 @@ export const Page = () => {
 				</Stack>
 
 				<Stack gap={2}>
+					<hr/>
 					<h5>Enviados</h5>
 
 					<Stack gap={3}>
 						{sent.length === 0 ? (
-							<div className="text-muted text-center">No has enviado ninguna solicitud de amistad.</div>
+							<div className="text-muted text-center">No has enviado ninguna solicitud.</div>
 						) : (
 							sent.map((r) => <SendItem key={r.id} request={r} />)
 						)}
