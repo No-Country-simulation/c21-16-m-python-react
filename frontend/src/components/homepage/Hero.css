@@ -21,6 +21,7 @@
 	font-optical-sizing: auto;
 	font-weight: 600;
 	font-style: normal;
+	position: absolute;
 }
 .container-hero form h2 {
 	font-family: "Montserrat", sans-serif;

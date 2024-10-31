@@ -8,7 +8,7 @@ export const Unete = () => {
 		link: "/auth/register",
 		titulo: "Unete a la red social de comida",
 		parrafo:
-			"Únete a PostPlate y comparte sabores tus sabores con los demás. Puedes elegir libremente tus platos favoritos, compartirlos y vincular con personas.",
+			"Puedes elegir libremente tus platos favoritos, compartirlos y vincular con personas.",
 		boton: "Registrarse",
 		botonColor: "#FF7926",
 		display: "none",
