@@ -16,10 +16,6 @@ export const useGetFeed = () => {
 	return useQuery({
 		queryKey: postKeys.feed(),
 		queryFn: () => getFeed(accessToken),
-		select: (data) => {
-			data.results.sort((a, b) => b.id - a.id);
-			return data;
-		},
 		enabled: !!accessToken,
 	});
 };
@@ -53,27 +49,14 @@ export const useCreatePost = () => {
 
 	return useMutation({
 		mutationFn: (values) => create(accessToken, values),
-		onSuccess: (post) => {
+		onSuccess: () => {
 			const profile = queryClient.getQueryData(authKeys.profile());
 
-			queryClient.setQueryData(postKeys.byUsername(profile.username), (old) => {
-				if (!old) {
-					return [post];
-				}
-				return [post, ...old];
+			queryClient.invalidateQueries({
+				queryKey: postKeys.feed(),
 			});
-			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old)
-					return {
-						count: 1,
-						next: null,
-						previous: null,
-						results: [post],
-					};
-				return {
-					...old,
-					results: [post, ...old.results],
-				};
+			queryClient.invalidateQueries({
+				queryKey: postKeys.byUsername(profile.username),
 			});
 		},
 	});

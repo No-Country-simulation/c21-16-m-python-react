@@ -1,19 +1,19 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, Col, Row } from "react-bootstrap";
 import { PostGallery } from "./post-gallery";
 import { PostOptions } from "./post-options";
 import { PostUserProfile } from "./post-user-profile";
 
 export const PostItem = ({ post }) => {
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
-	const handleBody = (event) => {
-		const targets = ["card-body", "card-text"];
-		if (targets.some((target) => event.target.classList.contains(target))) {
-			// navigate(`posts/${post.id}`);
-			alert("#TODO: Navigate to post");
-		}
-	};
+	// const handleBody = (event) => {
+	// 	const targets = ["card-body", "card-text"];
+	// 	if (targets.some((target) => event.target.classList.contains(target))) {
+	// 		// navigate(`posts/${post.id}`);
+	// 		alert("#TODO: Navigate to post");
+	// 	}
+	// };
 
 	return (
 		<Card key={post.id}>
@@ -27,11 +27,19 @@ export const PostItem = ({ post }) => {
 					</Col>
 				</Row>
 			</CardHeader>
-			<Card.Body role="button" onClick={handleBody}>
+			<Card.Body role="button">
 				<Card.Text>{post.content}</Card.Text>
 				<PostGallery files={post.files_set} />
 			</Card.Body>
-			{/* <Card.Footer>#TODO: Footer</Card.Footer> */}
+			<Card.Footer>
+				<small className="text-muted">
+					{new Intl.DateTimeFormat("en-US", {
+						year: "numeric",
+						month: "2-digit",
+						day: "2-digit",
+					}).format(new Date(post.publication_date))}
+				</small>
+			</Card.Footer>
 		</Card>
 	);
 };

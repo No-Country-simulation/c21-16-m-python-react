@@ -169,18 +169,22 @@ export const Page = () => {
 				onSelect={(tab) => {
 					navigate(`/${user.data?.username}/${tab}`);
 				}}
+				style={{
+					marginLeft: "-0.75rem",
+					marginRight: "-0.75rem",
+				}}
 			>
-				<Tab eventKey="requests" title="Requests" />
-				<Tab eventKey="friends" title="Friends" />
+				<Tab eventKey="requests" title="Solicitudes" />
+				<Tab eventKey="friends" title="Amigos" />
 			</Tabs>
 
 			<Stack as="section" gap={5} className="mt-3">
 				<Stack gap={2}>
-					<h5>Pending</h5>
+					<h5>Pendientes</h5>
 
 					<Stack gap={2}>
 						{pending.length === 0 ? (
-							<div className="text-muted text-center">You have no pending friend requests.</div>
+							<div className="text-muted text-center">No tienes solicitudes de amistad pendientes.</div>
 						) : (
 							pending.map((r) => <PendingItem key={r.id} request={r} />)
 						)}
@@ -188,11 +192,11 @@ export const Page = () => {
 				</Stack>
 
 				<Stack gap={2}>
-					<h5>Sent</h5>
+					<h5>Enviados</h5>
 
 					<Stack gap={3}>
 						{sent.length === 0 ? (
-							<div className="text-muted text-center">You have not sent any friend requests.</div>
+							<div className="text-muted text-center">No has enviado ninguna solicitud de amistad.</div>
 						) : (
 							sent.map((r) => <SendItem key={r.id} request={r} />)
 						)}

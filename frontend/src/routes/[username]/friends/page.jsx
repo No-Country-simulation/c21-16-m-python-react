@@ -19,7 +19,7 @@ const Friend = ({ request }) => {
 	const handleRemove = () => {
 		remove.mutate(request.id, {
 			onSuccess() {
-				toast.success("Friend removed");
+				toast.success("Amigo eliminado");
 			},
 		});
 	};
@@ -60,7 +60,7 @@ const Friend = ({ request }) => {
 			</Col>
 			<Col className="text-end">
 				<Button variant="danger" size="sm" onClick={handleRemove} disabled={isPending}>
-					{remove.isPending ? "Removing..." : "Remove"}
+					{remove.isPending ? "Eliminando..." : "Eliminar"}
 				</Button>
 			</Col>
 		</Row>
@@ -115,14 +115,18 @@ export const Page = () => {
 				onSelect={(tab) => {
 					navigate(`/${user.data?.username}/${tab}`);
 				}}
+				style={{
+					marginLeft: "-0.75rem",
+					marginRight: "-0.75rem",
+				}}
 			>
-				{auth_user.data?.username === username ? <Tab eventKey="requests" title="Requests" /> : null}
-				<Tab eventKey="friends" title="Friends" />
+				{auth_user.data?.username === username ? <Tab eventKey="requests" title="Solicitudes" /> : null}
+				<Tab eventKey="friends" title="Amigos" />
 			</Tabs>
 
 			<Stack as="section" gap={2} className="mt-3">
 				<h5>
-					List{" "}
+					Lista{" "}
 					<Badge bg="secondary" className="ms-2">
 						{friends.length}
 					</Badge>

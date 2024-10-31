@@ -3,30 +3,30 @@ import { Button, Container, Dropdown, Image, Navbar, Ratio } from "react-bootstr
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useAuth, useGetProfile, useSignout } from "@/features/auth";
 import user from "../../multimedia/SVGs/USER.svg";
-import LOGO from "../../multimedia/generales/LOGO.png";
-import "./Header.css";
+
 export const Header = () => {
 	const { isAuthenticated, isPending } = useAuth();
+
 	const profile = useGetProfile();
+
 	const signout = useSignout();
+
 	const handleSignout = () => {
 		signout.mutate(null);
 	};
 
 	return (
 		<Navbar
-			fixed="top"
+			style={{
+				position: "sticky",
+				top: 0,
+				zIndex: 1000,
+			}}
 			expand="lg"
-			className="bg-body-tertiary border-bottom header-main"
-			style={{ padding: "0", height: "6vh", zIndex: "10000" }}
+			className="bg-body-tertiary border-bottom"
 		>
 			<Container as="header">
-				<Navbar.Brand
-					as={Link}
-					style={{ width: "15%", padding: "0", margin: "0" }}
-					className="d-flex justify-content-evenly align-items-center header-brand"
-				>
-					{/* <img src={LOGO} style={{ height: "9vh", width: "auto" }} /> */}
+				<Navbar.Brand as={Link} style={{ color: "orangered" }} className="font-bolder m-0 p-0 fw-medium">
 					Post Plate
 				</Navbar.Brand>
 				{isPending ? (
@@ -35,7 +35,7 @@ export const Header = () => {
 					<>
 						<Navbar.Toggle />
 						<Navbar.Collapse className="justify-content-end">
-							<Dropdown variant="secondary">
+							<Dropdown>
 								<Dropdown.Toggle className="d-flex d-flex justify-content-center align-items-center">
 									{profile.isPending ? (
 										<p className="m-0">...</p>

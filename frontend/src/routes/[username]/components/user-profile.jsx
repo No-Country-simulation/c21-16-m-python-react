@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Badge, Button, Col, Image, Modal, Placeholder, Ratio, Row, Stack } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { Button, Col, Image, Modal, Placeholder, Ratio, Row, Stack } from "react-bootstrap";
 import { HTTP_STATUS } from "@/shared/utils";
 import { useGetUserByUsername } from "@/features/users";
 import { useGetProfile } from "@/features/auth";
 import { useAcceptRequest, useGetFriends, useGetPending, useRemoveFriend, useSendRequest } from "@/features/friends";
 import { EditProfile } from "./edit-profile";
+import { PencilIcon } from "@heroicons/react/24/outline";
 
 const MODALS = {
 	VIEW_PROFILE: "view-profile",
@@ -100,7 +101,8 @@ export const UserProfile = () => {
 								/>
 							) : auth_user.data.username === username ? (
 								<Button variant="primary" size="sm" onClick={() => setModals(MODALS.EDIT_PROFILE)}>
-									Edit Profile
+									<PencilIcon style={{ width: "14px", height: "14px" }} className="me-2" />
+									Editar perfil
 								</Button>
 							) : request ? (
 								<Button
@@ -111,11 +113,11 @@ export const UserProfile = () => {
 										accept.mutate(request.id);
 									}}
 								>
-									{accept.isPending ? "..." : "Accept Request"}
+									{accept.isPending ? "..." : "Aceptar solicitud de amistad"}
 								</Button>
 							) : sent ? (
-								<Button variant="primary" size="sm" disabled>
-									Request Sent
+								<Button variant="secondary" size="sm" disabled>
+									Solicitud enviada
 								</Button>
 							) : friend ? (
 								<Button
@@ -124,33 +126,20 @@ export const UserProfile = () => {
 									onClick={() => removeFriend.mutate(friend.id)}
 									disabled={removeFriend.isPending}
 								>
-									{removeFriend.isPending ? "..." : "Unfriend"}
+									{removeFriend.isPending ? "..." : "Eliminar amigo"}
 								</Button>
 							) : (
 								<Button
-									variant="primary"
+									variant="success"
 									size="sm"
 									onClick={() => {
 										addFriend.mutate(user.data.id);
 									}}
 									disabled={addFriend.isPending}
 								>
-									{addFriend.isPending ? "..." : "Add Friend"}
+									{addFriend.isPending ? "..." : "Enviar solicitud"}
 								</Button>
 							)}
-						</Col>
-					</Row>
-				</Stack>
-
-				<Stack>
-					<Row>
-						<Col>
-							<Button as={Link} variant="secondary" size="sm" to={`/${username}/friends`}>
-								Friends{" "}
-								<Badge bg="primary" className="ms-1">
-									{friends.data.length}
-								</Badge>
-							</Button>
 						</Col>
 					</Row>
 				</Stack>

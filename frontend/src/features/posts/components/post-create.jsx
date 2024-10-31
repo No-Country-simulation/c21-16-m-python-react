@@ -102,20 +102,27 @@ export const PostCreate = () => {
 			<Row className="mt-2">
 				<Col>
 					<Form.Group controlId="files">
-						<Form.Label className="btn btn-outline-primary m-0">
+						<Form.Label
+							className="btn btn-outline-primary m-0 d-flex align-items-center"
+							style={{
+								width: "fit-content",
+							}}
+						>
 							<PhotoIcon
 								style={{
 									width: "24px",
 									height: "24px",
 								}}
+								className="me-2"
 							/>
+							<span className="fs-6">Subir imágenes</span>
 						</Form.Label>
 						<Form.Control
 							{...formik.getFieldProps("files")}
 							onChange={handleFileChange}
 							value=""
 							type="file"
-							accept="image/*,video/*"
+							accept="image/*"
 							isInvalid={formik.touched.files && formik.errors.files}
 							disabled={isPending || isMaxUploadFiles}
 							multiple
@@ -124,8 +131,13 @@ export const PostCreate = () => {
 						<Form.Control.Feedback type="invalid">{formik.errors.files}</Form.Control.Feedback>
 					</Form.Group>
 				</Col>
+
 				<Col className="text-end">
-					<Button type="submit" disabled={isPending}>
+					<Button
+						variant="success"
+						type="submit"
+						disabled={isPending || (!formik.values.content && !formik.values.files.length)}
+					>
 						{isPending ? "Publicando..." : "Publicar"}
 					</Button>
 				</Col>
