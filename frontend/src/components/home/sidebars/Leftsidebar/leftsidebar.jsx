@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Badge, Stack } from "react-bootstrap";
 import { HomeIcon, UserGroupIcon, UserIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import { useGetProfile } from "@/features/auth";
@@ -48,6 +48,7 @@ export const Leftsidebar = () => {
 			].map(({ to, label, icon: Icon, badge }) => (
 				<NavLink
 					key={to}
+					as = {Link}
 					to={to}
 					style={{
 						color: "orangered",

@@ -23,7 +23,7 @@ class PublicationViewSet(viewsets.ModelViewSet):
 
     # Permite que cualquier persona (sin necesidad de iniciar sesión) pueda ver las publicaciones.
     permission_classes = [AllowAny]
-
+    pagination_class = None
     # Solo permite el método "GET", que es el que se usa para obtener/leer datos (no se puede crear ni modificar desde aquí).
     http_method_names = ['get']
 

@@ -69,25 +69,14 @@ export const useRemovePost = () => {
 
 	return useMutation({
 		mutationFn: (id) => remove(accessToken, id),
-		onSuccess: (_, id) => {
+		onSuccess: () => {
 			const profile = queryClient.getQueryData(authKeys.profile());
 
-			queryClient.setQueryData(postKeys.byUsername(profile.username), (old) => {
-				if (!old) return [];
-				return old.filter((p) => p.id !== id);
+			queryClient.invalidateQueries({
+				queryKey: postKeys.feed(),
 			});
-			queryClient.setQueryData(postKeys.feed(), (old) => {
-				if (!old)
-					return {
-						count: 0,
-						next: null,
-						previous: null,
-						results: [],
-					};
-				return {
-					...old,
-					results: old.results.filter((post) => post.id !== id),
-				};
+			queryClient.invalidateQueries({
+				queryKey: postKeys.byUsername(profile.username),
 			});
 		},
 	});

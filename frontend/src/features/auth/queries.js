@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "../users";
 import { getNewTokens, getProfile, login, register, updateProfile } from "./api";
-import { REFRESH_TOKEN_KEY, TOKENS_INITIAL_VALUES } from "./constants";
+import { REFRESH_TOKEN_KEY } from "./constants";
+import { useNavigate } from "react-router-dom";
 
 export const authKeys = {
 	key: () => ["auth"],
@@ -11,47 +12,32 @@ export const authKeys = {
 };
 
 export const useAuth = () => {
-	const queryClient = useQueryClient();
-
+	
 	const { data, isPending, isError } = useQuery({
 		queryKey: authKeys.tokens(),
-		queryFn: () => {
-			const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-			return refreshToken ? getNewTokens(refreshToken) : TOKENS_INITIAL_VALUES;
-		},
-
-		refetchInterval: 1000 * 60 * 30, // 30 minutes
+		queryFn: getNewTokens,
+	//	refetchInterval: 1000 * 60 * 30, // 30 minutes
+	//	retryOnMount: false,
 	});
-	const { refresh, access } = data ?? TOKENS_INITIAL_VALUES;
 
-	const onSignin = ({ refresh, access }) => {
-		localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
-		queryClient.setQueryData(authKeys.tokens(), { refresh, access });
-	};
+	const refreshToken = data?.refresh;
+	const accessToken = data?.access;
 
-	const onSignout = () => {
-		localStorage.removeItem(REFRESH_TOKEN_KEY);
-		queryClient.setQueryData(authKeys.tokens(), TOKENS_INITIAL_VALUES);
-	};
 
-	const isAuthenticated = Boolean(access);
+	const isAuthenticated = !! accessToken;
 
 	useEffect(() => {
-		if (isError) {
-			onSignout();
-		}
-		if (refresh) {
-			localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
+		
+		if (refreshToken) {
+			localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isError, refresh]);
+	}, [refreshToken]);
 
 	return {
-		refreshToken: refresh,
-		accessToken: access,
+		refreshToken,
+		accessToken,
 		isAuthenticated,
-		onSignin,
-		onSignout,
 		isPending,
 		isError,
 	};
@@ -87,13 +73,14 @@ export const useRegister = () => {
 
 export const useSignout = () => {
 	const queryClient = useQueryClient();
+    const navigate = useNavigate()
 
 	return useMutation({
 		mutationFn: () => Promise.resolve(),
 		onSuccess() {
 			localStorage.removeItem(REFRESH_TOKEN_KEY);
-			queryClient.setQueryData(authKeys.tokens(), TOKENS_INITIAL_VALUES);
-			queryClient.setQueryData(authKeys.profile(), null);
+			queryClient.clear();
+			navigate('/auth/login');
 		},
 	});
 };

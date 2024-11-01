@@ -14,13 +14,13 @@ export const PostsFeed = () => {
 		<div>
 			<p>Error</p>
 		</div>
-	) : data.results.length === 0 ? (
+	) : data.length === 0 ? (
 		<div className="py-5 text-center text-secondary">
 			<p>No posts yet</p>
 		</div>
 	) : (
 		<Stack gap={3}>
-			{data.results.map((post) => (
+			{data.map((post) => (
 				<PostItem key={post.id} post={post} />
 			))}
 			{/* TODO: when there are no more posts, display a message */}
