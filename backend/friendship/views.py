@@ -58,7 +58,20 @@ class FriendViewSet(viewsets.ModelViewSet):
         # Retorna la solicitud de amistad creada con un estado HTTP 201
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def destroy(self, request, *args, **kwargs):
+        friend_request = self.get_object()  # Obtiene el objeto de solicitud de amistad
+
+        # Verifica que el usuario autenticado esté involucrado en la solicitud
+        if friend_request.id_user1 != request.user and friend_request.id_user2 != request.user:
+            print(request)
+            return Response({'detail': 'No tienes permiso para eliminar esta solicitud.'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Elimina la solicitud de amistad
+        friend_request.delete()
+        return Response({'detail': 'Solicitud de amistad eliminada exitosamente.'}, status=status.HTTP_200_OK)
+
     # Aceptar solicitud de amistad
+
     @action(detail=True, methods=['post'])
     def accept(self, request, pk=None):
         # Obtiene la solicitud de amistad correspondiente al ID en la URL
